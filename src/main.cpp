@@ -29,10 +29,10 @@ void test()
 {
     /**
       Author: rainautumn
-      Тестовая инициализация обьекта
+      ���������������� �������������������������� ��������������
     */
     _camera = new Camera();
-    _model = new Model((char*)"box");
+    _model = new Model((char*)"res/map_test");
     _model->init_camera(_camera);
     init_buffers(&_model->_res_mod);
 }
@@ -43,7 +43,7 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     /**
       Author: rainautumn
-      Рендеринг тестового обьекта
+      ������������������ ������������������ ��������������
     */
 	_model->render();
 

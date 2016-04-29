@@ -24,12 +24,17 @@ public:
 
     mtx4 get_matrix();
 
+    void set_perspective(bool value);
+    void set_default_position(bool value);
+
     void set_mouse(double xpos, double ypos);
     void set_keymap(int key, int scancode, int action, int mods);
 
     res_cam _res_cam;
 private:
-    void get_res_cam(mtx4 buf_mtx);
+    void set_res_cam(mtx4 buf_mtx);
+    bool perspective;
+    bool default_position;
 };
 
 #endif // CAMERA_H

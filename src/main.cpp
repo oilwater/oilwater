@@ -32,6 +32,8 @@ void test()
       ���������������� �������������������������� ��������������
     */
     _camera = new Camera();
+    _camera->set_default_position(false);
+    _camera->set_perspective(true);
     _model = new Model((char*)"res/map_test");
     _model->init_camera(_camera);
     init_buffers(&_model->_res_mod);

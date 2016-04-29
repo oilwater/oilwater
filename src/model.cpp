@@ -79,6 +79,14 @@ void Model::render()
     glVertexAttribPointer(_res_mod.normals, 3, GL_FLOAT, GL_FALSE, sizeof(vtx3), 0);
     glEnableVertexAttribArray(_res_mod.normals);
 
+    glBindBuffer(GL_ARRAY_BUFFER, _res_mod.tangent_buffer);
+    glVertexAttribPointer(_res_mod.tangents, 3, GL_FLOAT, GL_FALSE, sizeof(vtx3), 0);
+    glEnableVertexAttribArray(_res_mod.tangents);
+
+    glBindBuffer(GL_ARRAY_BUFFER, _res_mod.bitangent_buffer);
+    glVertexAttribPointer(_res_mod.bitangents, 3, GL_FLOAT, GL_FALSE, sizeof(vtx3), 0);
+    glEnableVertexAttribArray(_res_mod.bitangents);
+
     glDrawArrays(GL_TRIANGLES,0, _res_mod.element_len);
 
 }
@@ -189,7 +197,7 @@ void Model::parser_model(char *path)
     istringstream element_v_strim(elem_array_v);
 
 
-    //ну здесь не активный момент.. можно и подождать!
+    //���� ���������� ���� ���������������� ������������.. ���������� �� ������������������!
 
 
     for(unsigned int k = 0; k < num_of_vertex * 4 ; k++)

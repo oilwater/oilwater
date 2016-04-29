@@ -26,7 +26,7 @@ mtx4 Camera::get_matrix()
     mtx4 buf_angular;
     buf_angular.tranform_angle(_res_pos.angular_position);
     mtx4 buf_perspective;
-    buf_perspective.perspective(1,1,3.5,150);
+    buf_perspective.perspective(1,1,0.5,150);
     get_res_cam(buf_angular);
 
     return buf_perspective * buf_angular * buf_position;

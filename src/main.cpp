@@ -23,32 +23,36 @@ bool run = true;
 GLFWwindow *window;
 
 Model *_model;
+Model *_model2;
+
 Camera *_camera;
 
 void test()
 {
-    /**
-      Author: rainautumn
-      ���������������� �������������������������� ��������������
-    */
+    glDisable(GL_DEPTH_TEST);
     _camera = new Camera();
-    _camera->set_default_position(false);
-    _camera->set_perspective(true);
-    _model = new Model((char*)"res/map_test");
+    _camera->set_default_position(true);
+    _camera->set_perspective(false);
+
+    _model = new Model((char*)"res/load_sprite_inside");
+    _model->_res_pos.position.init(0, 0, 1);
     _model->init_camera(_camera);
     init_buffers(&_model->_res_mod);
+
+
+    _model2 = new Model((char*)"res/load_sprite_outside");
+    _model2->_res_pos.angular_acceleration.init(0, 0, 0.001);
+    _model2->init_camera(_camera);
+    init_buffers(&_model2->_res_mod);
 }
 
 void display()
 {
     glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    /**
-      Author: rainautumn
-      ������������������ ������������������ ��������������
-    */
-	_model->render();
 
+	_model2->render();
+	_model->render();
     glfwSwapBuffers(window);
     glfwPollEvents();
 }
@@ -78,12 +82,15 @@ int main(int argc, char** argv)
     glfwSwapInterval(1);
     glfwShowWindow(window);
 
-	glewInit();
-	test();
+    glewInit();
+    test();
 
-	glEnable(GL_DOUBLEBUFFER);
+    glEnable(GL_DOUBLEBUFFER);
     glEnable(GL_DEPTH_TEST);
-    glDisable(GL_TEXTURE_2D);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glEnable(GL_ALPHA_TEST);
+  // glDisable(GL_TEXTURE_2D);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(window, width/2, height/2);
@@ -92,8 +99,6 @@ int main(int argc, char** argv)
     glfwSetCursorPosCallback(window, CursorPosCal);
 
     while(run)
-    {
         display();
-    }
     return 0;
 }

@@ -8,10 +8,14 @@
 
 mtx4 Position::get_position_matrix()
 {
+	_res_pos.position += _res_pos.velocity;
+	_res_pos.velocity += _res_pos.acceleration;
     mtx4 buf_position;
     buf_position.drop();
     buf_position.tranform_position(_res_pos.position);
 
+	_res_pos.angular_position += _res_pos.angular_velocity;
+	_res_pos.angular_velocity += _res_pos.angular_acceleration;
     mtx4 buf_angle;
     buf_angle.drop();
     buf_angle.tranform_angle(_res_pos.angular_position);

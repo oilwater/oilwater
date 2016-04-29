@@ -14,9 +14,8 @@ using namespace std;
 
 Camera::Camera()
 {
-    _res_pos.position.drop();
-    _res_pos.angular_position.drop();
-    _res_pos.position.init(0, -2, -10);
+    _res_pos.angular_position.init(M_PI/2, 0, 0);
+    _res_pos.position.init(0, 0, 0);
 }
 
 void Camera::set_perspective(bool value)
@@ -36,7 +35,8 @@ mtx4 Camera::get_matrix()
 	if(default_position)
 	{
 		buf_position.init();
-		buf_angular.init();
+		_res_pos.angular_position.init(M_PI/2, 0, 0);
+		buf_angular.tranform_angle(_res_pos.angular_position);
 	}
 	else
 	{

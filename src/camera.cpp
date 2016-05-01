@@ -14,18 +14,22 @@ using namespace std;
 
 Camera::Camera()
 {
+	default_position = false;
+	monitor_h = 1;
+	monitor_w = 1;
     _res_pos.angular_position.init(M_PI/2, 0, 0);
     _res_pos.position.init(0, 0, 0);
-}
-
-void Camera::set_perspective(bool value)
-{
-	perspective = value;
 }
 
 void Camera::set_default_position(bool value)
 {
 	default_position = value;
+}
+
+void Camera::set_monitor(float h ,float w)
+{
+	monitor_h = h;
+	monitor_w = w;
 }
 
 mtx4 Camera::get_matrix()
@@ -48,10 +52,7 @@ mtx4 Camera::get_matrix()
 		buf_angular.tranform_angle(_res_pos.angular_position);
 	}
     mtx4 buf_perspective;
-    if(perspective)
-    	buf_perspective.perspective(1,1,1,150);
-    else
-    	buf_perspective.init();
+   	buf_perspective.perspective(monitor_h, monitor_w, 1, 150);
     set_res_cam(buf_angular);
 
     return buf_perspective * buf_angular * buf_position;

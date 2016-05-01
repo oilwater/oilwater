@@ -9,6 +9,9 @@
 
 Kernel::Kernel(int argc, char** argv)
 {
+	/* default config */
+	height = DEF_HEIGHT;
+	width = DEF_WIDTH;
 	/* open and read config file */
 	char option[255];
 	char value[255];
@@ -44,10 +47,10 @@ Kernel::Kernel(int argc, char** argv)
 				map_name = optarg;
 				break;
 			case 'h':
-				height = atoi(optarg);
+				height = atof(optarg);
 				break;
 			case 'w':
-				width = atoi(optarg);
+				width = atof(optarg);
 				break;
 		}
 		opt = getopt(argc, argv, optString);

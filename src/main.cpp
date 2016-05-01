@@ -11,6 +11,7 @@
 #include "model.h"
 #include "initbuff.hpp"
 #include "camera.h"
+#include "kernel.h"
 
 #include <iostream>
 using namespace std;
@@ -84,6 +85,7 @@ void CursorPosCal(GLFWwindow *window, double xpos, double ypos)
 
 int main(int argc, char** argv)
 {
+		Kernel *kernel = new Kernel(argc, argv);
     glfwInit();
     window = glfwCreateWindow(width, height, "oilwater", NULL, NULL);
 

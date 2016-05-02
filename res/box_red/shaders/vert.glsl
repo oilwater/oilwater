@@ -18,13 +18,13 @@ varying mat3 TBN;
 
 void main()
 {
-             NORMAL = (vec3(camera_matrix * vec4(normals, 0)));
-        vec3 TANGENT = (vec3(camera_matrix * vec4(tangents, 0)));
-        vec3 BITANGENT = (vec3(camera_matrix * vec4(bitangents, 0)));
+             NORMAL = (vec3(world_matrix * vec4(normals, 0)));
+        vec3 TANGENT = (vec3(world_matrix * vec4(tangents, 0)));
+        vec3 BITANGENT = (vec3(world_matrix * vec4(bitangents, 0)));
 
         TBN = mat3(TANGENT, BITANGENT, NORMAL);
 
-	texcord = UV;
+        texcord = UV;
 
-	gl_Position = camera_matrix * world_matrix * vertex;
+        gl_Position = camera_matrix * world_matrix * vertex;
 }

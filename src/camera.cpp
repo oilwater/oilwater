@@ -18,7 +18,7 @@ Camera::Camera()
 	default_position = false;
 	monitor_h = 1;
 	monitor_w = 1;
-    _res_pos.angular_position.init(M_PI/2, 0, 0);
+    _res_pos.angular_position.init(0, 0, 0);
     _res_pos.position.init(0, 0, 0);
 }
 
@@ -53,7 +53,7 @@ mtx4 Camera::get_matrix()
 		buf_angular.tranform_angle(_res_pos.angular_position);
 	}
     mtx4 buf_perspective;
-    buf_perspective.perspective(1.0, monitor_w/monitor_h, 1, 150);
+    buf_perspective.perspective(0.3, 0.3 * monitor_w/monitor_h, 0.3, 150);
     set_res_cam(buf_angular);
 
     return buf_perspective * buf_angular * buf_position;
@@ -61,8 +61,8 @@ mtx4 Camera::get_matrix()
 
 void Camera::set_mouse(double xpos, double ypos)
 {
-    _res_pos.angular_position.v[1] += (monitor_w/2 - xpos) / sence;
-    _res_pos.angular_position.v[0] += (monitor_h/2 - ypos) / sence;
+    _res_pos.angular_position.v[1] += (monitor_w/2.0 - xpos) / sence;
+    _res_pos.angular_position.v[0] += (monitor_h/2.0 - ypos) / sence;
 }
 
 void Camera::set_keymap(int key, int scancode, int action, int mods)

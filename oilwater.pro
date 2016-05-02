@@ -26,8 +26,18 @@ HEADERS += \
     src/model.h \
     src/position.h
 
-#LIBS =	-lglfw -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor -lpthread
+LIBS =	-lglfw -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor -lpthread
 
 # On FreeBSD glfw it glfw3.
 #
-LIBS =	-lglfw3 -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor -lpthread
+#LIBS =	-lglfw3 -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor -lpthread
+
+DISTFILES += \
+    res/map_test/shaders/vert.glsl \
+    res/map_test/shaders/frag.glsl \
+    res/load_sprite_inside/shaders/vert.glsl \
+    res/load_sprite_inside/shaders/frag.glsl \
+    res/load_sprite_outside/shaders/vert.glsl \
+    res/load_sprite_outside/shaders/frag.glsl \
+    res/box_red/shaders/vert.glsl \
+    res/box_red/shaders/frag.glsl

@@ -23,5 +23,5 @@ void main()
 	float depth = LinearizeDepth(gl_FragCoord.z) / far; 
             gl_FragDepth = depth;
 
-            gl_FragColor = (NormalMapFactor) * texture2D(colour_map, texcord);
+            gl_FragColor = vec4(vec3(NormalMapFactor * texture2D(colour_map, texcord)),  texture2D(colour_map, texcord).a);
 }

@@ -259,7 +259,4 @@ void init_buffers(res_mod *_res_mod)
     _res_mod->colour_uniform =
             glGetUniformLocation(_res_mod->program, "colour_map");
 
-
-
-
 }

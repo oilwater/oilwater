@@ -52,6 +52,9 @@ Model::~Model()
 void Model::render()
 {
     mtx4 world_matrix = get_position_matrix();
+    glUseProgram(_res_mod.program);
+    glUniformMatrix4fv (_res_mod.camera_matrix, 1, GL_TRUE, &camera->get_matrix().m[0][0]);
+    glUniformMatrix4fv (_res_mod.world_matrix, 1, GL_TRUE, &world_matrix.m[0][0]);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _res_mod.colour_map);
@@ -64,7 +67,6 @@ void Model::render()
     glUniformMatrix4fv (_res_mod.camera_matrix, 1, GL_TRUE, &camera->get_matrix().m[0][0]);
     glUniformMatrix4fv (_res_mod.world_matrix, 1, GL_TRUE, &world_matrix.m[0][0]);
 
-    glUseProgram(_res_mod.program);
 
     glBindBuffer(GL_ARRAY_BUFFER, _res_mod.vertex_buffer);
     glVertexAttribPointer(_res_mod.vertex, 4, GL_FLOAT, GL_FALSE, sizeof(vtx4), (const GLvoid*)0);
@@ -285,6 +287,7 @@ void Model::calc_tangents()
         {
             _res_mod.bitangent_data.push_back(bitangent_buf);
             _res_mod.tangent_data.push_back  (tangent_buf);
+
         }
     }
 

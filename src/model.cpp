@@ -14,6 +14,8 @@ Model::Model(char *path)
 {
 	// TODO Auto-generated constructor stub
 
+    Position();
+
 	stringstream model_path;
 
 	stringstream vertex_path;

@@ -14,6 +14,7 @@ using namespace std;
 
 Camera::Camera()
 {
+    Position();
 	default_position = false;
 	monitor_h = 1;
 	monitor_w = 1;
@@ -52,7 +53,7 @@ mtx4 Camera::get_matrix()
 		buf_angular.tranform_angle(_res_pos.angular_position);
 	}
     mtx4 buf_perspective;
-   	buf_perspective.perspective(monitor_h, monitor_w, 1, 150);
+    buf_perspective.perspective(1.0, monitor_w/monitor_h, 1, 150);
     set_res_cam(buf_angular);
 
     return buf_perspective * buf_angular * buf_position;
@@ -60,21 +61,21 @@ mtx4 Camera::get_matrix()
 
 void Camera::set_mouse(double xpos, double ypos)
 {
-    _res_pos.angular_position.v[1] += (400 - xpos) / sence;
-    _res_pos.angular_position.v[0] += (400 - ypos) / sence;
+    _res_pos.angular_position.v[1] += (monitor_w/2 - xpos) / sence;
+    _res_pos.angular_position.v[0] += (monitor_h/2 - ypos) / sence;
 }
 
 void Camera::set_keymap(int key, int scancode, int action, int mods)
 {
     if(key == GLFW_KEY_W && action == GLFW_PRESS)
-        _res_pos.acceleration = _res_cam.normal.orterisation();
+        _res_pos.acceleration = _res_cam.normal.orterisation() / 5;
     if(key == GLFW_KEY_S && action == GLFW_PRESS)
-        _res_pos.acceleration = - _res_cam.normal.orterisation();
+        _res_pos.acceleration = - _res_cam.normal.orterisation() / 5;
 
     if(key == GLFW_KEY_A && action == GLFW_PRESS)
-        _res_pos.acceleration = _res_cam.tangent.orterisation();
+        _res_pos.acceleration = _res_cam.tangent.orterisation() / 5;
     if(key == GLFW_KEY_D && action == GLFW_PRESS)
-        _res_pos.acceleration = - _res_cam.tangent.orterisation();
+        _res_pos.acceleration = - _res_cam.tangent.orterisation() / 5;
 }
 
 void Camera::set_res_cam(mtx4 buf_mtx)

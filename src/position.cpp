@@ -6,6 +6,16 @@
  */
 #include "position.h"
 
+Position::Position()
+{
+    _res_pos.acceleration.drop();
+    _res_pos.angular_acceleration.drop();
+    _res_pos.position.drop();
+    _res_pos.angular_position.drop();
+    _res_pos.angular_velocity.drop();
+    _res_pos.velocity.drop();
+}
+
 mtx4 Position::get_position_matrix()
 {
 	_res_pos.position += _res_pos.velocity;

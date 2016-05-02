@@ -23,6 +23,7 @@ struct res_pos
 class Position
 {
 public:
+    Position();
     res_pos _res_pos;
     mtx4 get_position_matrix();
     mtx4 get_position_matrix_sprite();

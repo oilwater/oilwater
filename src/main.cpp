@@ -4,7 +4,7 @@
  *  Created on: Mar 30, 2015
  *      Author: rainautumn
  */
-
+#include <QCoreApplication>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -16,8 +16,8 @@
 #include <iostream>
 using namespace std;
 
-#define width 1650.0
-#define height 1050.0
+float width;
+float height;
 
 bool run = true;
 
@@ -25,8 +25,6 @@ GLFWwindow *window;
 
 Model *_model;
 Model *_model2;
-Model *map;
-Model *map_clone;
 
 Camera *_camera;
 
@@ -34,7 +32,7 @@ void test()
 {
     _camera = new Camera();
     _camera->set_default_position(true);
-    _camera->set_monitor(1.0, width/height);
+    _camera->set_monitor(height, width);
 
 
     _model = new Model((char*)"res/load_sprite_inside");
@@ -44,7 +42,6 @@ void test()
 
 
     _model2 = new Model((char*)"res/load_sprite_outside");
-    _model2->_res_pos.angular_acceleration.init(0, 0.001, 0);
     _model2->_res_pos.position.init(0, 1.8, 0);
     _model2->init_camera(_camera);
     init_buffers(&_model2->_res_mod);
@@ -54,12 +51,10 @@ void display()
 {
     glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//	map->render();
-//	map_clone->render();
-	if (_model2->_res_pos.angular_velocity.v[1] > 0.3)
-		 _model2->_res_pos.angular_acceleration.init(0, -0.001, 0);
-	if (_model2->_res_pos.angular_velocity.v[1] < -0.3)
-		 _model2->_res_pos.angular_acceleration.init(0, 0.001, 0);
+    if (_model2->_res_pos.angular_velocity.v[1] > 0)
+         _model2->_res_pos.angular_acceleration.init(0, -0.3, 0);
+    else
+         _model2->_res_pos.angular_acceleration.init(0, 0.003, 0);
 	_model2->render();
 	_model->render();
 
@@ -85,7 +80,12 @@ void CursorPosCal(GLFWwindow *window, double xpos, double ypos)
 
 int main(int argc, char** argv)
 {
-		Kernel *kernel = new Kernel(argc, argv);
+    QCoreApplication a(argc, argv);
+    Kernel *kernel = new Kernel(argc, argv);
+
+    width = kernel->width;
+    height = kernel->height;
+
     glfwInit();
     window = glfwCreateWindow(width, height, "oilwater", NULL, NULL);
 
@@ -101,7 +101,7 @@ int main(int argc, char** argv)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glEnable(GL_ALPHA_TEST);
-  // glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(window, width/2, height/2);

@@ -13,16 +13,19 @@ Kernel::Kernel(int argc, char** argv)
 	height = DEF_HEIGHT;
 	width = DEF_WIDTH;
 	fullscreen = false;
+	mode = SINGLEPLAY;
+	map_name = "default_map";
 	load_config();
 	/* parse command line arguments */
-	static const char *optString = "m:h:w:f:";
+	static const char *optString = "m:h:w:f:c:s";
 	int opt = 0;
 	opt = getopt(argc, argv, optString);
 	while(opt != -1)
 	{
 		switch(opt) {
 			case 'm':
-				map_name = optarg;
+				map_name = (char*)malloc(sizeof(optarg));
+				strcpy(map_name, optarg);
 				break;
 			case 'h':
 				height = atof(optarg);
@@ -32,6 +35,14 @@ Kernel::Kernel(int argc, char** argv)
 				break;
 			case 'f':
 				fullscreen = atoi(optarg);
+				break;
+			case 'c':
+				mode = CLIENT;
+				server_address = (char*)malloc(sizeof(optarg));
+				strcpy(server_address, optarg);
+				break;
+			case 's':
+				mode = SERVER;
 				break;
 		}
 		opt = getopt(argc, argv, optString);
@@ -45,6 +56,18 @@ Kernel::Kernel(int argc, char** argv)
 	else
 	{
 		printf("Mode windowed\n");
+	}
+	switch (mode)
+	{
+		case SINGLEPLAY:
+			printf("Mode singleplay\n");
+			break;
+		case CLIENT:
+			printf("Mode client, server address is %s\n", server_address);
+			break;
+		case SERVER:
+			printf("Mode server\n");
+			break;
 	}
 	printf("Loading map %s\n", map_name);
 };

@@ -19,5 +19,5 @@ private:
 	char* map_name;
 	void load_config();
 	void save_config();
-	void do_command();
+	void do_command(char* input);
 };

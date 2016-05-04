@@ -147,4 +147,15 @@ void Kernel::do_command(char* input)
 		mode = SERVER;
 		/* ... */
 	}
+	if (!strcmp(command, "fullscreen"))
+	{
+		fullscreen = false;
+		save_config();
+	}
+	if (!strcmp(command, "windowed"))
+	{
+		fullscreen = true;
+		save_config();
+	}
+
 }

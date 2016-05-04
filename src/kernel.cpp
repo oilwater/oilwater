@@ -37,11 +37,19 @@ Kernel::Kernel(int argc, char** argv)
 				fullscreen = atoi(optarg);
 				break;
 			case 'c':
+				if (mode == SERVER)
+				{
+					printf("Warning: options -c and -s should not be used at one time\n");
+				}
 				mode = CLIENT;
 				server_address = (char*)malloc(sizeof(optarg));
 				strcpy(server_address, optarg);
 				break;
 			case 's':
+				if (mode == CLIENT)
+				{
+					printf("Warning: options -c and -s should not be used at one time\n");
+				}
 				mode = SERVER;
 				break;
 		}

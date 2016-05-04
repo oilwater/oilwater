@@ -6,9 +6,11 @@ class Kernel
 {
 public:
 	Kernel(int argc, char **argv);
-
     float width;
     float height;
+    bool fullscreen;
 private:
 	char* map_name;
+	void load_config();
+	void save_config();
 };

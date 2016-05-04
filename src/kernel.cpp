@@ -12,6 +12,45 @@ Kernel::Kernel(int argc, char** argv)
 	/* default config */
 	height = DEF_HEIGHT;
 	width = DEF_WIDTH;
+	fullscreen = false;
+	load_config();
+	/* parse command line arguments */
+	static const char *optString = "m:h:w:f:";
+	int opt = 0;
+	opt = getopt(argc, argv, optString);
+	while(opt != -1)
+	{
+		switch(opt) {
+			case 'm':
+				map_name = optarg;
+				break;
+			case 'h':
+				height = atof(optarg);
+				break;
+			case 'w':
+				width = atof(optarg);
+				break;
+			case 'f':
+				fullscreen = atoi(optarg);
+				break;
+		}
+		opt = getopt(argc, argv, optString);
+	}
+	save_config();
+	printf("Resolution set to %fx%f\n", width, height);
+	if (fullscreen)
+	{
+		printf("Mode fullscreen\n");
+	}
+	else
+	{
+		printf("Mode windowed\n");
+	}
+	printf("Loading map %s\n", map_name);
+};
+
+void Kernel::load_config()
+{
 	/* open and read config file */
 	char option[255];
 	char value[255];
@@ -29,6 +68,10 @@ Kernel::Kernel(int argc, char** argv)
 			{
 				width = atof(value);
 			}
+			if (!strcmp(option, "fullscreen"))
+			{
+				fullscreen = atoi(value);
+			}
 		}
 		fclose(config_file);
 	}
@@ -36,32 +79,18 @@ Kernel::Kernel(int argc, char** argv)
 	{
 		printf("Warning: no config file found\n");
 	}
-	/* parse command line arguments */
-	static const char *optString = "m:h:w:";
-	int opt = 0;
-	opt = getopt(argc, argv, optString);
-	while(opt != -1)
-	{
-		switch(opt) {
-			case 'm':
-				map_name = optarg;
-				break;
-			case 'h':
-				height = atof(optarg);
-				break;
-			case 'w':
-				width = atof(optarg);
-				break;
-		}
-		opt = getopt(argc, argv, optString);
-	}
+}
+
+void Kernel::save_config()
+{
 	/* write config to config file */
-//	FILE *config_file;
+	FILE *config_file;
 	config_file = fopen(CONFIG_PATH, "w");
 	if (config_file != NULL)
 	{
 		fprintf(config_file, "%s %f\n", "width", width);
 		fprintf(config_file, "%s %f\n", "height", height);
+		fprintf(config_file, "%s %i\n", "fullscreen", fullscreen);
 		fclose(config_file);
 		printf("Config saved\n");
 	}
@@ -69,6 +98,4 @@ Kernel::Kernel(int argc, char** argv)
 	{
 		printf("Warning: can not save config\n");
 	}
-	printf("Resolution set to %fx%f\n", width, height);
-	printf("Loading map %s\n", map_name);
-};
+}

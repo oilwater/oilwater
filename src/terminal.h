@@ -2,7 +2,8 @@
 #define TERMINAL_H
 
 #include "kernel.h"
-
+#include <sstream>
+#include <string>
 class Terminal
 {
 public:
@@ -12,6 +13,8 @@ public:
 
 private:
     Kernel *_kernel;
+
+    std::string comand_buf;
 };
 
 #endif // TERMINAL_H

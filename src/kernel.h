@@ -18,11 +18,11 @@ public:
     bool fullscreen;
     int mode;
 	char* server_address;
+    void do_command(char* input);
 private:
 	char* map_name;
 	void load_config();
 	void save_config();
-	void do_command(char* input);
 };
 
 #endif KERNEL_H

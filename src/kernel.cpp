@@ -76,7 +76,6 @@ Kernel::Kernel(int argc, char** argv)
 			printf("Mode server\n");
 			break;
 	}
-	printf("Selected map is %s\n", map_name);
 };
 
 void Kernel::load_config()
@@ -133,6 +132,7 @@ void Kernel::save_config()
 /* was not tested yet */
 void Kernel::do_command(char* input)
 {
+    printf("kernel \x1b[31mDEBUG\x1b[0m input comand '%s'\n", input);
 	char command[255];
 	sscanf(input, "%s", command);
 	if (!strcmp(command, "connect"))

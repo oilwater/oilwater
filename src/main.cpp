@@ -14,84 +14,82 @@
 #include "initbuff.hpp"
 #include "camera.h"
 #include "kernel.h"
+#include "terminal.h"
 
 #include <iostream>
+
 using namespace std;
 
 float width;
 float height;
 
 bool run = true;
-bool lock_cursor = false;
+
 GLFWwindow *window;
-
-
 
 vector <Model*>models;
 Camera *_camera;
+Terminal *_terminal;
+
+
+void set_camera_type(char type)
+{
+    _camera->cam_type = type;
+    switch (_camera->cam_type) {
+    case LOCK_LOOK:
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        _camera->lock_position = true;
+        break;
+    case FREE_LOOK:
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetCursorPos(window, width/2, height/2);
+        _camera->lock_position = false;
+        break;
+    case TERMINAL_LOOK:
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+        break;
+    default:
+        break;
+    }
+}
 
 void loading()
 {
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
     models.clear();
     _camera->set_default_position(true);
 
      Model *_model;
     _model = new Model((char*)"res/load_sprite_inside");
-    _model->_res_pos.position.init(0, 1.8, 0);
-        _model->_res_pos.angular_acceleration.init(0.0, 0.001, 0.0);
+    _model->_res_pos.position.init(0, 0,- 2);
+    _model->_res_pos.angular_position.init(M_PI_2, 0 ,0);
+    _model->_res_pos.angular_acceleration.init(0.0, 0.001, 0.0);
     _model->init_camera(_camera);
     init_buffers(&_model->_res_mod);
     models.push_back(_model);
 
 
     _model = new Model((char*)"res/load_sprite_outside");
-    _model->_res_pos.position.init(0, 2, 0);
-    _model->init_camera(_camera);
-    init_buffers(&_model->_res_mod);
-    models.push_back(_model);
-
-    _model = new Model((char*)"res/load_sprite_inside");
-    _model->_res_pos.position.init(0, 4.8, 0);
-     _model->_res_pos.angular_acceleration.init(0.0, 0.001, 0.0);
-    _model->init_camera(_camera);
-    init_buffers(&_model->_res_mod);
-    models.push_back(_model);
-
-
-    _model = new Model((char*)"res/load_sprite_outside");
-    _model->_res_pos.position.init(0, 5, 0);
+    _model->_res_pos.position.init(0, 0,- 2.1);
+    _model->_res_pos.angular_position.init(M_PI_2, 0 ,0);
     _model->init_camera(_camera);
     init_buffers(&_model->_res_mod);
     models.push_back(_model);
 
     _model = new Model((char*)"res/map_test");
-    _model->_res_pos.position.init(0, -15, 0);
+    _model->_res_pos.position.init(-20, -7, -30);
     _model->init_camera(_camera);
     init_buffers(&_model->_res_mod);
     models.push_back(_model);
 
-    _model = new Model((char*)"res/box_red");
-    _model->_res_pos.position.init(-2, -7.8, 4);
-     _model->_res_pos.angular_acceleration.init(0.0, 0.00001, 0.0);
-    _model->init_camera(_camera);
-    init_buffers(&_model->_res_mod);
-    models.push_back(_model);
 
-    _model = new Model((char*)"res/box_red");
-    _model->_res_pos.position.init(-2, -8.8, 0);
-    _model->init_camera(_camera);
-    init_buffers(&_model->_res_mod);
-    models.push_back(_model);
 }
 
 void unlock_camera()
 {
-    sleep(2);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    sleep(1);
+    set_camera_type(FREE_LOOK);
     glfwSetCursorPos(window, width/2, height/2);
-    lock_cursor = true;
     _camera->set_default_position(false);
 }
 
@@ -109,7 +107,34 @@ void display()
 
 void KeyCall(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-    _camera->set_keymap(key, scancode, action, mods);
+    if(key == GLFW_KEY_GRAVE_ACCENT && action == GLFW_PRESS)
+    {
+        if(_camera->cam_type != TERMINAL_LOOK)
+        {
+                set_camera_type(TERMINAL_LOOK);
+            cout << "console open" <<endl;
+        }
+        else
+        {
+            if(_camera->lock_position)
+                    set_camera_type(LOCK_LOOK);
+            else
+                    set_camera_type(FREE_LOOK);
+            cout << "console close" <<endl;
+        }
+    }
+
+    switch (_camera->cam_type) {
+    case FREE_LOOK:
+        _camera->set_keymap(key, scancode, action, mods);
+        break;
+    case TERMINAL_LOOK:
+        _terminal->set_keymap(key, scancode, action, mods);
+
+        break;
+    default:
+        break;
+    }
 	if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		run = false;
@@ -119,9 +144,17 @@ void KeyCall(GLFWwindow *window, int key, int scancode, int action, int mods)
 
 void CursorPosCal(GLFWwindow *window, double xpos, double ypos)
 {
-    _camera->set_mouse(xpos, ypos);
-    if (lock_cursor)
-        glfwSetCursorPos(window, width/2, height/2);
+    switch (_camera->cam_type) {
+    case FREE_LOOK:
+         _camera->set_mouse(xpos, ypos);
+         glfwSetCursorPos(window, width/2, height/2);
+        break;
+    case TERMINAL_LOOK:
+
+        break;
+    default:
+        break;
+    }
 }
 
 int main(int argc, char** argv)
@@ -143,6 +176,9 @@ int main(int argc, char** argv)
 
     _camera = new Camera();
     _camera->set_monitor(height, width);
+    set_camera_type(LOCK_LOOK);
+
+    _terminal = new Terminal(kernel);
 
     loading();
     thread thr(unlock_camera);
@@ -152,7 +188,6 @@ int main(int argc, char** argv)
     glEnable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
-//    glEnable(GL_ALPHA_TEST);
     glDisable(GL_TEXTURE_2D);
 
     glfwSetKeyCallback(window, KeyCall);

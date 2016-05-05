@@ -7,6 +7,11 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+
+#define FREE_LOOK 0
+#define LOCK_LOOK 1
+#define TERMINAL_LOOK 2
+
 #include "glmath.hpp"
 #include "position.h"
 
@@ -31,10 +36,13 @@ public:
     void set_keymap(int key, int scancode, int action, int mods);
 
     res_cam _res_cam;
+
+    char cam_type;
+
+    bool lock_position;
 private:
     float monitor_h, monitor_w;
     void set_res_cam(mtx4 buf_mtx);
-    bool default_position;
 };
 
 #endif // CAMERA_H

@@ -14,8 +14,9 @@ using namespace std;
 
 Camera::Camera()
 {
+    cam_type = 0;
     Position();
-	default_position = false;
+    lock_position = false;
 	monitor_h = 1;
 	monitor_w = 1;
     _res_pos.angular_position.init(0, 0, 0);
@@ -24,7 +25,7 @@ Camera::Camera()
 
 void Camera::set_default_position(bool value)
 {
-	default_position = value;
+    lock_position = value;
 }
 
 void Camera::set_monitor(float h ,float w)
@@ -37,10 +38,10 @@ mtx4 Camera::get_matrix()
 {
     mtx4 buf_position;
 	mtx4 buf_angular;
-	if(default_position)
+    if(lock_position)
 	{
 		buf_position.init();
-		_res_pos.angular_position.init(M_PI/2, 0, 0);
+        _res_pos.angular_position.init(0, 0, 0);
 		buf_angular.tranform_angle(_res_pos.angular_position);
 	}
 	else

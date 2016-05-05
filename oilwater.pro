@@ -15,7 +15,8 @@ SOURCES += \
     src/kernel.cpp \
     src/main.cpp \
     src/model.cpp \
-    src/position.cpp
+    src/position.cpp \
+    src/terminal.cpp
 
 HEADERS += \
     src/camera.h \
@@ -24,7 +25,8 @@ HEADERS += \
     src/initbuff.hpp \
     src/kernel.h \
     src/model.h \
-    src/position.h
+    src/position.h \
+    src/terminal.h
 
 LIBS =	-lglfw -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor -lpthread
 

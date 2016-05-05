@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "model.h"
-#include "camera.h"
 #include "kernel.h"
 #include "string.h"
 

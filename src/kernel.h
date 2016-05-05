@@ -1,3 +1,6 @@
+#ifndef KERNEL_H
+#define KERNEL_H
+
 #define DEF_HEIGHT 640.0
 #define DEF_WIDTH 800.0
 #define CONFIG_PATH "res/.config"
@@ -21,3 +24,5 @@ private:
 	void save_config();
 	void do_command(char* input);
 };
+
+#endif KERNEL_H

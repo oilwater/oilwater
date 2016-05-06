@@ -3,6 +3,8 @@ QT += gui
 
 CONFIG += c++11
 
+QMAKE_CXXFLAGS += -std=c++11
+
 TARGET = oilwater
 CONFIG -= console
 
@@ -42,4 +44,6 @@ DISTFILES += \
     res/load_sprite_outside/shaders/vert.glsl \
     res/load_sprite_outside/shaders/frag.glsl \
     res/box_red/shaders/vert.glsl \
-    res/box_red/shaders/frag.glsl
+    res/box_red/shaders/frag.glsl \
+    res/boom_test_sprite/shaders/vert.glsl \
+    res/boom_test_sprite/shaders/frag.glsl

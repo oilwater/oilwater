@@ -7,7 +7,6 @@
 #include <QCoreApplication>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <thread>
 #include <unistd.h>
 
 #include "model.h"
@@ -85,14 +84,6 @@ void loading()
 
 }
 
-void unlock_camera()
-{
-    sleep(1);
-    set_camera_type(FREE_LOOK);
-    glfwSetCursorPos(window, width/2, height/2);
-    _camera->set_default_position(false);
-}
-
 void display()
 {
     glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -110,17 +101,14 @@ void KeyCall(GLFWwindow *window, int key, int scancode, int action, int mods)
     if(key == GLFW_KEY_GRAVE_ACCENT && action == GLFW_PRESS)
     {
         if(_camera->cam_type != TERMINAL_LOOK)
-        {
                 set_camera_type(TERMINAL_LOOK);
-            cout << "console open" <<endl;
-        }
+
         else
         {
             if(_camera->lock_position)
                     set_camera_type(LOCK_LOOK);
             else
                     set_camera_type(FREE_LOOK);
-            cout << "console close" <<endl;
         }
     }
 
@@ -130,7 +118,6 @@ void KeyCall(GLFWwindow *window, int key, int scancode, int action, int mods)
         break;
     case TERMINAL_LOOK:
         _terminal->set_keymap(key, scancode, action, mods);
-
         break;
     default:
         break;
@@ -176,19 +163,18 @@ int main(int argc, char** argv)
 
     _camera = new Camera();
     _camera->set_monitor(height, width);
-    set_camera_type(LOCK_LOOK);
 
     _terminal = new Terminal(kernel);
 
     loading();
-    thread thr(unlock_camera);
-    thr.detach();
 
     glEnable(GL_DOUBLEBUFFER);
     glEnable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
+
+    set_camera_type(FREE_LOOK);
 
     glfwSetKeyCallback(window, KeyCall);
     glfwSetCursorPosCallback(window, CursorPosCal);

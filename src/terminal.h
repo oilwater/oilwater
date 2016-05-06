@@ -13,7 +13,7 @@ public:
 
 private:
     Kernel *_kernel;
-
+    bool caps_key;
     std::string comand_buf;
 };
 

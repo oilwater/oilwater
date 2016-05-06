@@ -28,7 +28,8 @@ public:
     Camera();
 
     mtx4 get_matrix();
-
+    mtx4 get_matrix_sprite();
+    mtx4 get_matrix_hp();
     void set_default_position(bool value);
     void set_monitor(float h ,float w);
 

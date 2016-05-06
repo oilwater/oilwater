@@ -26,5 +26,5 @@ void main()
 
 	texcord = UV;
 
-        gl_Position = camera_matrix * world_matrix * vertex;
+	gl_Position = camera_matrix * world_matrix * vertex;
 }

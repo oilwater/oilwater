@@ -5,7 +5,6 @@ uniform sampler2D colour_map;
 
 float far  = 150.0;
 float near = 0.3;
-
 varying vec3 NORMAL;
 varying vec2 texcord;
 varying mat3 TBN;
@@ -23,5 +22,5 @@ void main()
         float depth = LinearizeDepth(gl_FragCoord.z) / far;
             gl_FragDepth = depth;
 
-            gl_FragColor = vec4(vec3(NormalMapFactor * texture2D(colour_map, texcord)),  texture2D(colour_map, texcord).a);
+            gl_FragColor =  texture2D(colour_map, texcord);
 }

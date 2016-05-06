@@ -8,11 +8,16 @@
 #define MODEL_H_
 
 #include <string>
-#include "glmath.hpp"
-#include "position.h"
 #include <GL/glew.h>
 #include <vector>
+
+#include "glmath.hpp"
+#include "position.h"
 #include "camera.h"
+
+#define MODEL_SPRITE_HP 2
+#define MODEL_SPRITE    1
+#define MODEL           0
 
 using namespace std;
 
@@ -53,6 +58,8 @@ public:
 	void render();
 
     void init_camera(Camera *_camera);
+
+    int type;
 private:
 	void parser_model(char *path);
     void calc_tangents();

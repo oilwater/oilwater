@@ -16,6 +16,8 @@ Model::Model(char *path)
 
     Position();
 
+    type = MODEL;
+
 	stringstream model_path;
 
 	stringstream vertex_path;
@@ -51,9 +53,27 @@ Model::~Model()
 
 void Model::render()
 {
-    mtx4 world_matrix = get_position_matrix();
+    mtx4 world_matrix;
     glUseProgram(_res_mod.program);
-    glUniformMatrix4fv (_res_mod.camera_matrix, 1, GL_TRUE, &camera->get_matrix().m[0][0]);
+
+    switch (type) {
+    case MODEL:
+            world_matrix = get_position_matrix();
+            glUniformMatrix4fv (_res_mod.camera_matrix, 1, GL_TRUE, &camera->get_matrix().m[0][0]);
+        break;
+    case MODEL_SPRITE:
+            _res_pos.angular_position.init(-camera->_res_pos.angular_position.v[0], -camera->_res_pos.angular_position.v[1],0);
+            world_matrix = get_position_matrix_sprite();
+            glUniformMatrix4fv (_res_mod.camera_matrix, 1, GL_TRUE, &camera->get_matrix_sprite().m[0][0]);
+        break;
+    case MODEL_SPRITE_HP:
+            world_matrix = get_position_matrix();
+            glUniformMatrix4fv (_res_mod.camera_matrix, 1, GL_TRUE, &camera->get_matrix_hp().m[0][0]);
+        break;
+    default:
+        break;
+    }
+
     glUniformMatrix4fv (_res_mod.world_matrix, 1, GL_TRUE, &world_matrix.m[0][0]);
 
     glActiveTexture(GL_TEXTURE0);
@@ -63,10 +83,6 @@ void Model::render()
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, _res_mod.normal_map);
     glUniform1i(_res_mod.normal_uniform, 1);
-
-    glUniformMatrix4fv (_res_mod.camera_matrix, 1, GL_TRUE, &camera->get_matrix().m[0][0]);
-    glUniformMatrix4fv (_res_mod.world_matrix, 1, GL_TRUE, &world_matrix.m[0][0]);
-
 
     glBindBuffer(GL_ARRAY_BUFFER, _res_mod.vertex_buffer);
     glVertexAttribPointer(_res_mod.vertex, 4, GL_FLOAT, GL_FALSE, sizeof(vtx4), (const GLvoid*)0);

@@ -4,8 +4,7 @@ uniform sampler2D normal_map;
 uniform sampler2D colour_map;
 
 float far  = 150.0;
-float near = 1.0;
-
+float near = 0.3;
 varying vec3 NORMAL;
 varying vec2 texcord;
 varying mat3 TBN;

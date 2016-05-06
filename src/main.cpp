@@ -56,32 +56,45 @@ void set_camera_type(char type)
 void loading()
 {
     models.clear();
-    _camera->set_default_position(true);
+    _camera->_res_pos.position.init(-5,-7,-5);
 
-     Model *_model;
-    _model = new Model((char*)"res/load_sprite_inside");
-    _model->_res_pos.position.init(0, 0,- 2);
-    _model->_res_pos.angular_position.init(M_PI_2, 0 ,0);
-    _model->_res_pos.angular_acceleration.init(0.0, 0.001, 0.0);
+    Model *_model;
+
+//    _model = new Model((char*)"res/load_sprite_inside");
+//    _model->_res_pos.position.init(0, 0, -2);
+//    _model->_res_pos.angular_acceleration.init(0.0, 0.0, 0.001);
+//    _model->type = MODEL_SPRITE_HP;
+//    _model->init_camera(_camera);
+//    init_buffers(&_model->_res_mod);
+//    models.push_back(_model);
+
+
+//    _model = new Model((char*)"res/load_sprite_outside");
+//    _model->type = MODEL_SPRITE_HP;
+//    _model->_res_pos.position.init(0, 0, -2.1);
+//    _model->init_camera(_camera);
+//    init_buffers(&_model->_res_mod);
+//    models.push_back(_model);
+
+    _model = new Model((char*)"res/boom_test_sprite");
+    _model->type = MODEL_SPRITE;
+    _model->_res_pos.position.init(0, 1, -3);
     _model->init_camera(_camera);
     init_buffers(&_model->_res_mod);
     models.push_back(_model);
 
-
-    _model = new Model((char*)"res/load_sprite_outside");
-    _model->_res_pos.position.init(0, 0,- 2.1);
-    _model->_res_pos.angular_position.init(M_PI_2, 0 ,0);
+    _model = new Model((char*)"res/boom_test_sprite");
+    _model->type = MODEL_SPRITE;
+    _model->_res_pos.position.init(10, 1, -4);
     _model->init_camera(_camera);
     init_buffers(&_model->_res_mod);
     models.push_back(_model);
 
     _model = new Model((char*)"res/map_test");
-    _model->_res_pos.position.init(-20, -7, -30);
+    _model->_res_pos.position.init(0, 0, -3);
     _model->init_camera(_camera);
     init_buffers(&_model->_res_mod);
     models.push_back(_model);
-
-
 }
 
 void display()

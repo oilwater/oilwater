@@ -55,15 +55,57 @@ mtx4 Camera::get_matrix()
 	}
     mtx4 buf_perspective;
     buf_perspective.perspective(0.3, 0.3 * monitor_w/monitor_h, 0.3, 150);
+
     set_res_cam(buf_angular);
 
     return buf_perspective * buf_angular * buf_position;
 }
 
+mtx4 Camera::get_matrix_sprite()
+{
+    mtx4 buf_position;
+    mtx4 buf_angular;
+    if(lock_position)
+    {
+        buf_position.init();
+        _res_pos.angular_position.init(0, 0, 0);
+        buf_angular.tranform_angle(_res_pos.angular_position);
+    }
+    else
+    {
+        _res_pos.acceleration -= _res_pos.acceleration / 10;
+        _res_pos.velocity -= _res_pos.velocity / 10;
+        _res_pos.velocity += _res_pos.acceleration / 4;
+        _res_pos.position += _res_pos.velocity / 4;
+        buf_position.tranform_position(_res_pos.position);
+        buf_angular.tranform_angle(_res_pos.angular_position);
+    }
+    mtx4 buf_perspective;
+    buf_perspective.perspective(0.3, 0.3 * monitor_w/monitor_h, 0.3, 150);
+
+    return buf_perspective * buf_angular * buf_position;
+}
+
+mtx4 Camera::get_matrix_hp()
+{
+    mtx4 buf_perspective;
+    buf_perspective.perspective(0.3, 0.3 * monitor_w/monitor_h, 0.3, 150);
+
+    return buf_perspective;
+}
+
 void Camera::set_mouse(double xpos, double ypos)
 {
     _res_pos.angular_position.v[1] += (monitor_w/2.0 - xpos) / sence;
+    if (_res_pos.angular_position.v[1] > M_PI)
+        _res_pos.angular_position.v[1] = -M_PI;
+    else if (_res_pos.angular_position.v[1] < -M_PI)
+        _res_pos.angular_position.v[1] = M_PI;
     _res_pos.angular_position.v[0] += (monitor_h/2.0 - ypos) / sence;
+    if (_res_pos.angular_position.v[0] > M_PI_2)
+        _res_pos.angular_position.v[0] = M_PI_2;
+    else if (_res_pos.angular_position.v[0] < -M_PI_2)
+        _res_pos.angular_position.v[0] = -M_PI_2;
 }
 
 void Camera::set_keymap(int key, int scancode, int action, int mods)

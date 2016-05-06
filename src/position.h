@@ -27,6 +27,7 @@ public:
     res_pos _res_pos;
     mtx4 get_position_matrix();
     mtx4 get_position_matrix_sprite();
+    mtx4 get_position_matrix_hp();
 };
 
 #endif // POSITION_H

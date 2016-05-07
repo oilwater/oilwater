@@ -5,8 +5,14 @@
  *      Author: rainautumn
  */
 #include <QCoreApplication>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#ifdef __APPLE__
+    #include </usr/local/Cellar/glew/1.13.0/include/GL/glew.h>
+    #include </usr/local/Cellar/glfw3/3.1.2/include/GLFW/glfw3.h>
+#else
+    #include <GL/glew.h>
+    #include <GLFW/glfw3.h>
+#endif
+
 #include <unistd.h>
 
 #include "model.h"
@@ -14,6 +20,7 @@
 #include "camera.h"
 #include "kernel.h"
 #include "terminal.h"
+#include "network.h"
 
 #include <iostream>
 
@@ -29,7 +36,7 @@ GLFWwindow *window;
 vector <Model*>models;
 Camera *_camera;
 Terminal *_terminal;
-
+Network * _network;
 
 void set_camera_type(char type)
 {
@@ -90,7 +97,7 @@ void loading()
     init_buffers(&_model->_res_mod);
     models.push_back(_model);
 
-    _model = new Model((char*)"res/map_test");
+    _model = new Model((char*)"../../../res/map_test");
     _model->_res_pos.position.init(0, 0, -3);
     _model->init_camera(_camera);
     init_buffers(&_model->_res_mod);
@@ -101,6 +108,8 @@ void display()
 {
     glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    _network->packet();
 
     for(int x = models.size() - 1; x >= 0; x--)
         models[x]->render();
@@ -180,6 +189,8 @@ int main(int argc, char** argv)
     _terminal = new Terminal(kernel);
 
     loading();
+    _network = new Network();
+    _network->init_camera(_camera);
 
     glEnable(GL_DOUBLEBUFFER);
     glEnable(GL_DEPTH_TEST);

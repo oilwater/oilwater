@@ -9,6 +9,7 @@
 
 Kernel::Kernel(int argc, char** argv)
 {
+	map_was_loaded = false;
 	/* default config */
 	height = DEF_HEIGHT;
 	width = DEF_WIDTH;
@@ -169,14 +170,15 @@ void Kernel::do_command(char* input)
 
 void Kernel::load_map()
 {
-//	if (models == NULL)
-//	{
+	if (map_was_loaded)
+	{
+		/* erase all models from vector */
+	}
+	else
+	{
 		models = new std::vector<SModel*>();
-//	}
-//	else
-//	{
-		/* erase models from vector */
-//	}
+		map_was_loaded = true;
+	}
 	FILE *map_file;
 	char map_path[255];
 	map_path[0] = '\0';
@@ -190,7 +192,7 @@ void Kernel::load_map()
 	SModel* model;
 	if (map_file != NULL)
 	{
-		while(fscanf(map_file, "%i", &id) != EOF)
+		while(fscanf(map_file, "%i\n", &id) != EOF)
 		{
 			printf("Loading object %d\n", id);
 			pos = new Position();
@@ -198,8 +200,8 @@ void Kernel::load_map()
 			model->mesh_number = id;
 			model->position = pos;
 			model->position->_res_pos.angular_acceleration.v[2] = 0.01;
-			float p0, p1, p2, v0, v1, v2, a0, a1, a2, ap0, ap1, ap2, av0, av1, av2, aa0, aa1, aa2;
-			if (fscanf(map_file, "%f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f",
+			double p0, p1, p2, v0, v1, v2, a0, a1, a2, ap0, ap1, ap2, av0, av1, av2, aa0, aa1, aa2;
+			if (fscanf(map_file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", 
 						&p0, &p1, &p2, &v0, &v1, &v2, &a0, &a1, &a2, &ap0, &ap1, &ap2, &av0, &av1, &av2, &aa0, &aa1, &aa2)
 						== EOF)
 			{

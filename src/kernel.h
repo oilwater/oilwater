@@ -47,7 +47,7 @@ public:
 
 private:
 	char* map_name;
-
+		bool map_was_loaded;
     void print_fpc();
 
 	void load_config();

@@ -10,7 +10,6 @@
 Kernel::Kernel(int argc, char** argv)
 {
 	/* default config */
-#define DEF_PORT 33333
 	server_port = DEF_PORT;
 	local_port = DEF_PORT;
 	height = DEF_HEIGHT;

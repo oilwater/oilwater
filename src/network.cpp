@@ -8,6 +8,7 @@ Network::Network()
 void Network::init_camera(Camera *camera)
 {
     _camera = camera;
+    initSocket();
 }
 
 void Network::packet()

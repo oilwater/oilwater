@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QUdpSocket>
 #include "camera.h"
+
+#define DEF_PORT 33333
+
 class Network:QObject
 {
     Q_OBJECT

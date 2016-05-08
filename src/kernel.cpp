@@ -209,24 +209,12 @@ void Kernel::load_map()
 			}
 			else
 			{
-				model->position->_res_pos.position.v[0] = p0;
-				model->position->_res_pos.position.v[1] = p1;
-				model->position->_res_pos.position.v[2] = p2;
-				model->position->_res_pos.velocity.v[0] = v0;
-				model->position->_res_pos.velocity.v[1] = v1;
-				model->position->_res_pos.velocity.v[2] = v2;
-				model->position->_res_pos.acceleration.v[0] = a0;
-				model->position->_res_pos.acceleration.v[1] = a1;
-				model->position->_res_pos.acceleration.v[2] = a2;
-				model->position->_res_pos.angular_position.v[0] = ap0;
-				model->position->_res_pos.angular_position.v[1] = ap1;
-				model->position->_res_pos.angular_position.v[2] = ap2;
-				model->position->_res_pos.angular_velocity.v[0] = av0;
-				model->position->_res_pos.angular_velocity.v[1] = av1;
-				model->position->_res_pos.angular_velocity.v[2] = av2;
-				model->position->_res_pos.angular_acceleration.v[0] = aa0;
-				model->position->_res_pos.angular_acceleration.v[1] = aa1;
-				model->position->_res_pos.angular_acceleration.v[2] = aa2;
+				model->position->_res_pos.position.init(p0, p1, p2);
+				model->position->_res_pos.velocity.init(v0, v1, v2);
+				model->position->_res_pos.acceleration.init(a0, a1, a2);
+				model->position->_res_pos.angular_position.init(ap0, ap1, ap2);
+				model->position->_res_pos.angular_velocity.init(av0, av1, av2);
+				model->position->_res_pos.angular_acceleration.init(aa0, aa1, aa2);
 				models->push_back(model);
 				printf("Added object %d\n", id);
 			}

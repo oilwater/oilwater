@@ -37,7 +37,8 @@ public:
     int mode;
 
 	char* server_address;
-
+	int server_port;
+	int local_port;
     void do_command(char* input);
 
     void load_map();

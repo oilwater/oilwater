@@ -235,3 +235,7 @@ void Kernel::print_fpc()
     qDebug() << "fpc min: " << fpc_info.fpc_min;
 }
 
+void Kernel::get_network(Network* _network)
+{
+	network = _network;
+}

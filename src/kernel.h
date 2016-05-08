@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "position.h"
+#include "network.h"
 
 #define DEF_HEIGHT 640.0
 #define DEF_WIDTH 800.0
@@ -44,7 +45,8 @@ public:
     std::vector <SModel*> *models;
 
     Fpc_info fpc_info;
-
+		Network *network;
+		void get_network(Network* network);
 private:
 	char* map_name;
 		bool map_was_loaded;

@@ -193,6 +193,8 @@ int main(int argc, char** argv)
     _network = new Network();
     _network->init_camera(_camera);
 
+		_kernel->get_network(_network);
+
     glEnable(GL_DOUBLEBUFFER);
     glEnable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

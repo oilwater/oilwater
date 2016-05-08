@@ -43,12 +43,12 @@ public:
     void load_map();
 
     std::vector <SModel*> *models;
+	char* map_name;
 
     Fpc_info fpc_info;
 		Network *network;
 		void get_network(Network* network);
 private:
-	char* map_name;
 		bool map_was_loaded;
     void print_fpc();
 

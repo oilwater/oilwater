@@ -17,6 +17,7 @@ Kernel::Kernel(int argc, char** argv)
 	mode = SINGLEPLAY;
 	map_name = "default_map";
 	load_config();
+	models = new std::vector<SModel*>();
 	/* parse command line arguments */
 	static const char *optString = "m:h:w:f:c:s";
 	int opt = 0;
@@ -144,7 +145,7 @@ void Kernel::do_command(char* input)
 	if (!strcmp(command, "connect"))
 	{
 		mode = CLIENT;
-		sscanf(input, "%*s %s", server_address); 
+		sscanf(input, "%s %s", command, server_address); 
 		/* ... */
 	}
 	if (!strcmp(command, "server"))
@@ -155,29 +156,36 @@ void Kernel::do_command(char* input)
 	if (!strcmp(command, "fullscreen"))
 	{
 		fullscreen = false;
+		/* ... */
 		save_config();
 	}
 	if (!strcmp(command, "windowed"))
 	{
 		fullscreen = true;
+		/* ... */
 		save_config();
 	}
     if (!strcmp(command, "fpc"))
     {
         print_fpc();
     }
+  if (!strcmp(command, "loadmap"))
+  {
+		sscanf(input, "%s %s", command, map_name);
+		load_map();
+	}
 }
 
 void Kernel::load_map()
 {
-	if (map_was_loaded)
+	SModel* model;
+	/* erase all models from vector */
+	while(!models->empty())
 	{
-		/* erase all models from vector */
-	}
-	else
-	{
-		models = new std::vector<SModel*>();
-		map_was_loaded = true;
+		model = models->back();
+		delete model->position;
+		free(model);
+		models->pop_back();
 	}
 	FILE *map_file;
 	char map_path[255];
@@ -189,7 +197,6 @@ void Kernel::load_map()
 	map_file = fopen(map_path, "r");
 	int id;
 	Position* pos;
-	SModel* model;
 	if (map_file != NULL)
 	{
 		while(fscanf(map_file, "%i\n", &id) != EOF)

@@ -15,7 +15,8 @@ Kernel::Kernel(int argc, char** argv)
 	width = DEF_WIDTH;
 	fullscreen = false;
 	mode = SINGLEPLAY;
-	map_name = "default_map";
+	map_name = (char*)malloc(255);
+	strcpy(map_name, "default_map");
 	load_config();
 	models = new std::vector<SModel*>();
 	/* parse command line arguments */
@@ -178,8 +179,10 @@ void Kernel::do_command(char* input)
 
 void Kernel::load_map()
 {
+	printf("Loading map %s\n", map_name);
 	SModel* model;
 	/* erase all models from vector */
+	printf("Erasing objects\n");
 	while(!models->empty())
 	{
 		model = models->back();
@@ -193,7 +196,7 @@ void Kernel::load_map()
 	strcat(map_path, "res/maps/");
 	strcat(map_path, map_name);
 	strcat(map_path, ".map");
-	printf("Loading map %s\n", map_path);
+	printf("Map path is %s\n", map_path);
 	map_file = fopen(map_path, "r");
 	int id;
 	Position* pos;
@@ -206,7 +209,6 @@ void Kernel::load_map()
 			model = (SModel*)malloc(sizeof(SModel));
 			model->mesh_number = id;
 			model->position = pos;
-			model->position->_res_pos.angular_acceleration.v[2] = 0.01;
 			double p0, p1, p2, v0, v1, v2, a0, a1, a2, ap0, ap1, ap2, av0, av1, av2, aa0, aa1, aa2;
 			if (fscanf(map_file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", 
 						&p0, &p1, &p2, &v0, &v1, &v2, &a0, &a1, &a2, &ap0, &ap1, &ap2, &av0, &av1, &av2, &aa0, &aa1, &aa2)

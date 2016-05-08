@@ -3,12 +3,6 @@ QT += gui
 
 CONFIG += c++11
 
-# OS X PATH
-#INCLUDEPATH += /usr/local/Cellar/glew/1.13.0/include/
-#INCLUDEPATH += /usr/local/Cellar/glfw3/3.1.2/include/
-
-#QMAKE_CXXFLAGS += -std=c++11
-
 TARGET = oilwater
 CONFIG -= console
 
@@ -36,15 +30,25 @@ HEADERS += \
     src/terminal.h \
     src/network.h
 
-#LIBS =	-lglfw -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor -lpthread
+LIBS =	-lglfw -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor -lpthread
 
+# OS X PATH
+#
+#INCLUDEPATH += /usr/local/Cellar/glew/1.13.0/include/
+#INCLUDEPATH += /usr/local/Cellar/glfw3/3.1.2/include/
+#
 # OS X LIBS
+#
 #LIBS = -L/usr/local/Cellar/glew/1.13.0/lib -L/usr/local/Cellar/glfw3/3.1.2/lib -framework OpenGL -lglfw3 -lGLEW -framework IOKit -framework CoreFoundation -framework CoreVideo -framework Cocoa -v
 
 
-# On FreeBSD glfw it glfw3.
+# FreeBSD LIBS LIBS
 #
 #LIBS =	-lglfw3 -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor -lpthread
+
+# WIN32 
+#
+#LIBS =  -lglfw3 -lopengl32 -lgdi32 -lglew32 -Wl,--subsystem,windows
 
 DISTFILES += \
     res/map_test/shaders/vert.glsl \

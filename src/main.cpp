@@ -4,23 +4,21 @@
  *  Created on: Mar 30, 2015
  *      Author: rainautumn
  */
-#include <QCoreApplication>
-#ifdef __APPLE__
-    #include </usr/local/Cellar/glew/1.13.0/include/GL/glew.h>
-    #include </usr/local/Cellar/glfw3/3.1.2/include/GLFW/glfw3.h>
-#else
-    #include <GL/glew.h>
-    #include <GLFW/glfw3.h>
-#endif
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 #include <unistd.h>
+
+#include <QCoreApplication>
+#include <thread>
 
 #include "model.h"
 #include "initbuff.hpp"
 #include "camera.h"
-#include "kernel.h"
 #include "terminal.h"
 #include "network.h"
+#include "kernel.h"
 
 #include <iostream>
 
@@ -34,10 +32,14 @@ bool run = true;
 GLFWwindow *window;
 
 vector <Model*>models;
+
+
 Camera *_camera;
 Terminal *_terminal;
 Network * _network;
+Kernel *_kernel;
 
+int local_fpc = 0;
 void set_camera_type(char type)
 {
     _camera->cam_type = type;
@@ -67,22 +69,6 @@ void loading()
 
     Model *_model;
 
-//    _model = new Model((char*)"res/load_sprite_inside");
-//    _model->_res_pos.position.init(0, 0, -2);
-//    _model->_res_pos.angular_acceleration.init(0.0, 0.0, 0.001);
-//    _model->type = MODEL_SPRITE_HP;
-//    _model->init_camera(_camera);
-//    init_buffers(&_model->_res_mod);
-//    models.push_back(_model);
-
-
-//    _model = new Model((char*)"res/load_sprite_outside");
-//    _model->type = MODEL_SPRITE_HP;
-//    _model->_res_pos.position.init(0, 0, -2.1);
-//    _model->init_camera(_camera);
-//    init_buffers(&_model->_res_mod);
-//    models.push_back(_model);
-
     _model = new Model((char*)"res/boom_test_sprite");
     _model->type = MODEL_SPRITE;
     _model->_res_pos.position.init(0, 1, -3);
@@ -90,18 +76,25 @@ void loading()
     init_buffers(&_model->_res_mod);
     models.push_back(_model);
 
-    _model = new Model((char*)"res/boom_test_sprite");
-    _model->type = MODEL_SPRITE;
-    _model->_res_pos.position.init(10, 1, -4);
-    _model->init_camera(_camera);
-    init_buffers(&_model->_res_mod);
-    models.push_back(_model);
-
-    _model = new Model((char*)"../../../res/map_test");
+    _model = new Model((char*)"res/map_test");
     _model->_res_pos.position.init(0, 0, -3);
     _model->init_camera(_camera);
     init_buffers(&_model->_res_mod);
     models.push_back(_model);
+}
+
+void fpc_void()
+{
+    while(true)
+    {
+        sleep(1);
+        if(local_fpc > _kernel->fpc_info.fpc_max)
+            _kernel->fpc_info.fpc_max = local_fpc;
+        if(local_fpc < _kernel->fpc_info.fpc_min)
+            _kernel->fpc_info.fpc_min = local_fpc;
+        _kernel->fpc_info.fpc = local_fpc;
+        local_fpc = 0;
+    }
 }
 
 void display()
@@ -110,6 +103,8 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     _network->packet();
+
+    local_fpc++;
 
     for(int x = models.size() - 1; x >= 0; x--)
         models[x]->render();
@@ -169,16 +164,22 @@ void CursorPosCal(GLFWwindow *window, double xpos, double ypos)
 int main(int argc, char** argv)
 {
     QCoreApplication a(argc, argv);
-    Kernel *kernel = new Kernel(argc, argv);
 
-    width = kernel->width;
-    height = kernel->height;
+    _kernel = new Kernel(argc, argv);
+		_kernel->load_map();
+
+
+    thread fpc(fpc_void);
+    fpc.detach();
+
+    width = _kernel->width;
+    height = _kernel->height;
 
     glfwInit();
     window = glfwCreateWindow(width, height, "oilwater", NULL, NULL);
 
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
+    glfwSwapInterval(0);
     glfwShowWindow(window);
 
     glewInit();
@@ -186,11 +187,13 @@ int main(int argc, char** argv)
     _camera = new Camera();
     _camera->set_monitor(height, width);
 
-    _terminal = new Terminal(kernel);
+    _terminal = new Terminal(_kernel);
 
     loading();
     _network = new Network();
     _network->init_camera(_camera);
+
+		_kernel->get_network(_network);
 
     glEnable(GL_DOUBLEBUFFER);
     glEnable(GL_DEPTH_TEST);

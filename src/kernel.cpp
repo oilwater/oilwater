@@ -2,12 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "model.h"
+#include <string.h>
 #include "kernel.h"
-#include "string.h"
+
+#include <QDebug>
 
 Kernel::Kernel(int argc, char** argv)
 {
+	map_was_loaded = false;
 	/* default config */
 	height = DEF_HEIGHT;
 	width = DEF_WIDTH;
@@ -76,7 +78,11 @@ Kernel::Kernel(int argc, char** argv)
 			printf("Mode server\n");
 			break;
 	}
-};
+    fpc_info.fpc = 0;
+    fpc_info.fpc_max = 0;
+    fpc_info.fpc_min = 0;
+    fpc_info.fpc_min -=1;
+}
 
 void Kernel::load_config()
 {
@@ -156,5 +162,80 @@ void Kernel::do_command(char* input)
 		fullscreen = true;
 		save_config();
 	}
+    if (!strcmp(command, "fpc"))
+    {
+        print_fpc();
+    }
+}
 
+void Kernel::load_map()
+{
+	if (map_was_loaded)
+	{
+		/* erase all models from vector */
+	}
+	else
+	{
+		models = new std::vector<SModel*>();
+		map_was_loaded = true;
+	}
+	FILE *map_file;
+	char map_path[255];
+	map_path[0] = '\0';
+	strcat(map_path, "res/maps/");
+	strcat(map_path, map_name);
+	strcat(map_path, ".map");
+	printf("Loading map %s\n", map_path);
+	map_file = fopen(map_path, "r");
+	int id;
+	Position* pos;
+	SModel* model;
+	if (map_file != NULL)
+	{
+		while(fscanf(map_file, "%i\n", &id) != EOF)
+		{
+			printf("Loading object %d\n", id);
+			pos = new Position();
+			model = (SModel*)malloc(sizeof(SModel));
+			model->mesh_number = id;
+			model->position = pos;
+			model->position->_res_pos.angular_acceleration.v[2] = 0.01;
+			double p0, p1, p2, v0, v1, v2, a0, a1, a2, ap0, ap1, ap2, av0, av1, av2, aa0, aa1, aa2;
+			if (fscanf(map_file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", 
+						&p0, &p1, &p2, &v0, &v1, &v2, &a0, &a1, &a2, &ap0, &ap1, &ap2, &av0, &av1, &av2, &aa0, &aa1, &aa2)
+						== EOF)
+			{
+				printf("Unexpected end of map file %s\n", map_path);
+			}
+			else
+			{
+				model->position->_res_pos.position.init(p0, p1, p2);
+				model->position->_res_pos.velocity.init(v0, v1, v2);
+				model->position->_res_pos.acceleration.init(a0, a1, a2);
+				model->position->_res_pos.angular_position.init(ap0, ap1, ap2);
+				model->position->_res_pos.angular_velocity.init(av0, av1, av2);
+				model->position->_res_pos.angular_acceleration.init(aa0, aa1, aa2);
+				models->push_back(model);
+				printf("Added object %d\n", id);
+			}
+		}
+		fclose(map_file);
+	}
+	else
+	{
+		printf("Can not open map %s\n", map_path);
+	}
+
+}
+
+void Kernel::print_fpc()
+{
+    qDebug() << "fpc now: " << fpc_info.fpc;
+    qDebug() << "fpc max: " << fpc_info.fpc_max;
+    qDebug() << "fpc min: " << fpc_info.fpc_min;
+}
+
+void Kernel::get_network(Network* _network)
+{
+	network = _network;
 }

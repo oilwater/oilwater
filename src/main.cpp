@@ -166,7 +166,8 @@ int main(int argc, char** argv)
     QCoreApplication a(argc, argv);
 
     _kernel = new Kernel(argc, argv);
-//    kernel->get_models(&models);
+		_kernel->load_map();
+
 
     thread fpc(fpc_void);
     fpc.detach();

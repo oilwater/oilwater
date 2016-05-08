@@ -169,7 +169,58 @@ void Kernel::do_command(char* input)
 
 void Kernel::load_map()
 {
-
+	FILE *map_file;
+	char map_path[255];
+	map_path[0] = '\0';
+	strcat(map_path, "res/maps/");
+	strcat(map_path, map_name);
+	strcat(map_path, ".map");
+	printf("Loading map %s\n", map_path);
+	map_file = fopen(map_path, "r");
+	int id;
+	Position* pos;
+	SModel* model;
+	if (map_file != NULL)
+	{
+		while(fscanf(map_file, "%i", &id) != EOF)
+		{
+			printf("Loading object %d\n", id);
+			pos = new Position();
+			model = (SModel*)malloc(sizeof(SModel));
+			model->mesh_number = id;
+			model->position = pos;
+			if (fscanf(map_file, "%f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, ",
+						model->position->_res_pos.position.v[0],
+						model->position->_res_pos.position.v[1],
+						model->position->_res_pos.position.v[2],
+						model->position->_res_pos.velocity.v[0],
+						model->position->_res_pos.velocity.v[1],
+						model->position->_res_pos.velocity.v[2],
+						model->position->_res_pos.acceleration.v[0],
+						model->position->_res_pos.acceleration.v[1],
+						model->position->_res_pos.acceleration.v[2],
+						model->position->_res_pos.angular_position.v[0],
+						model->position->_res_pos.angular_position.v[1],
+						model->position->_res_pos.angular_position.v[2],
+						model->position->_res_pos.angular_velocity.v[0],
+						model->position->_res_pos.angular_velocity.v[1],
+						model->position->_res_pos.angular_velocity.v[2],
+						model->position->_res_pos.angular_acceleration.v[0],
+						model->position->_res_pos.angular_acceleration.v[1],
+						model->position->_res_pos.angular_acceleration.v[2]) == EOF)
+			{
+				printf("Unexpected end of map file %s\n", map_path);
+			}
+			else
+			{
+				models->push_back(model);
+			}
+		}
+	}
+	else
+	{
+		printf("Can not open map %s\n", map_path);
+	}
 }
 
 void Kernel::print_fpc()

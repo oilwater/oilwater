@@ -19,10 +19,10 @@ struct Fpc_info
     unsigned int fpc_max;
 };
 
-struct Models
+struct SModel
 {
     unsigned int mesh_number;
-    Position position;
+    Position* position;
 };
 
 class Kernel
@@ -41,7 +41,7 @@ public:
 
     void load_map();
 
-    std::vector <Models*> *models;
+    std::vector <SModel*> *models;
 
     Fpc_info fpc_info;
 

@@ -5,6 +5,8 @@
 #include <string.h>
 #include "kernel.h"
 
+#include <QDebug>
+
 Kernel::Kernel(int argc, char** argv)
 {
 	/* default config */
@@ -155,16 +157,21 @@ void Kernel::do_command(char* input)
 		fullscreen = true;
 		save_config();
 	}
-
-}
-
-void Kernel::get_models(vector <Model*> *_models)
-{
-	models = _models;
+    if (!strcmp(command, "fpc"))
+    {
+        print_fpc();
+    }
 }
 
 void Kernel::load_map()
 {
 
+}
+
+void Kernel::print_fpc()
+{
+    qDebug() << "fpc now: " << fpc_info.fpc;
+    qDebug() << "fpc max: " << fpc_info.fpc_max;
+    qDebug() << "fpc min: " << fpc_info.fpc_min;
 }
 

@@ -12,6 +12,6 @@ void Network::init_camera(Camera *camera)
 
 void Network::packet()
 {
-    qDebug()<<_camera->_res_pos.angular_position.v[1];
+//    qDebug()<<_camera->_res_pos.angular_position.v[1];
 
 }

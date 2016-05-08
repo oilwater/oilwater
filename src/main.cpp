@@ -4,16 +4,13 @@
  *  Created on: Mar 30, 2015
  *      Author: rainautumn
  */
-#include <QCoreApplication>
-#ifdef __APPLE__
-    #include </usr/local/Cellar/glew/1.13.0/include/GL/glew.h>
-    #include </usr/local/Cellar/glfw3/3.1.2/include/GLFW/glfw3.h>
-#else
-    #include <GL/glew.h>
-    #include <GLFW/glfw3.h>
-#endif
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 #include <unistd.h>
+
+#include <QCoreApplication>
 
 #include "model.h"
 #include "initbuff.hpp"
@@ -34,9 +31,12 @@ bool run = true;
 GLFWwindow *window;
 
 vector <Model*>models;
+
+
 Camera *_camera;
 Terminal *_terminal;
 Network * _network;
+Kernel *_kernel;
 
 void set_camera_type(char type)
 {
@@ -90,14 +90,7 @@ void loading()
     init_buffers(&_model->_res_mod);
     models.push_back(_model);
 
-    _model = new Model((char*)"res/boom_test_sprite");
-    _model->type = MODEL_SPRITE;
-    _model->_res_pos.position.init(10, 1, -4);
-    _model->init_camera(_camera);
-    init_buffers(&_model->_res_mod);
-    models.push_back(_model);
-
-    _model = new Model((char*)"../../../res/map_test");
+    _model = new Model((char*)"res/map_test");
     _model->_res_pos.position.init(0, 0, -3);
     _model->init_camera(_camera);
     init_buffers(&_model->_res_mod);
@@ -169,11 +162,14 @@ void CursorPosCal(GLFWwindow *window, double xpos, double ypos)
 int main(int argc, char** argv)
 {
     QCoreApplication a(argc, argv);
-    Kernel *kernel = new Kernel(argc, argv);
-//		kernel->get_models(&models);
-		
-    width = kernel->width;
-    height = kernel->height;
+
+
+
+    _kernel = new Kernel(argc, argv);
+//    kernel->get_models(&models);
+
+    width = _kernel->width;
+    height = _kernel->height;
 
     glfwInit();
     window = glfwCreateWindow(width, height, "oilwater", NULL, NULL);
@@ -182,12 +178,12 @@ int main(int argc, char** argv)
     glfwSwapInterval(1);
     glfwShowWindow(window);
 
-    glewInit();
+        glewInit();
 
     _camera = new Camera();
     _camera->set_monitor(height, width);
 
-    _terminal = new Terminal(kernel);
+    _terminal = new Terminal(_kernel);
 
     loading();
     _network = new Network();

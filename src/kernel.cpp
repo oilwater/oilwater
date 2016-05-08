@@ -20,7 +20,7 @@ Kernel::Kernel(int argc, char** argv)
 	map_name = (char*)malloc(255);
 	strcpy(map_name, "default_map");
 	load_config();
-	models = new std::vector<SModel*>();
+//	models = new std::vector<SModel*>();
 	/* parse command line arguments */
 	static const char *optString = "m:h:w:f:c:s";
 	int opt = 0;
@@ -186,12 +186,12 @@ void Kernel::load_map()
 	SModel* model;
 	/* erase all models from vector */
 	printf("Erasing objects\n");
-	while(!models->empty())
+    while(!models.empty())
 	{
-		model = models->back();
-		delete model->position;
+        model = models.back();
+        delete model->position;
 		free(model);
-		models->pop_back();
+        models.pop_back();
 	}
 	FILE *map_file;
 	char map_path[255];
@@ -202,13 +202,13 @@ void Kernel::load_map()
 	printf("Map path is %s\n", map_path);
 	map_file = fopen(map_path, "r");
 	int id;
-	Position* pos;
+    res_pos* pos;
 	if (map_file != NULL)
 	{
 		while(fscanf(map_file, "%i\n", &id) != EOF)
 		{
 			printf("Loading object %d\n", id);
-			pos = new Position();
+            pos = new res_pos;
 			model = (SModel*)malloc(sizeof(SModel));
 			model->mesh_number = id;
 			model->position = pos;
@@ -221,13 +221,13 @@ void Kernel::load_map()
 			}
 			else
 			{
-				model->position->_res_pos.position.init(p0, p1, p2);
-				model->position->_res_pos.velocity.init(v0, v1, v2);
-				model->position->_res_pos.acceleration.init(a0, a1, a2);
-				model->position->_res_pos.angular_position.init(ap0, ap1, ap2);
-				model->position->_res_pos.angular_velocity.init(av0, av1, av2);
-				model->position->_res_pos.angular_acceleration.init(aa0, aa1, aa2);
-				models->push_back(model);
+                model->position->position.init(p0, p1, p2);
+                model->position->velocity.init(v0, v1, v2);
+                model->position->acceleration.init(a0, a1, a2);
+                model->position->angular_position.init(ap0, ap1, ap2);
+                model->position->angular_velocity.init(av0, av1, av2);
+                model->position->angular_acceleration.init(aa0, aa1, aa2);
+                models.push_back(model);
 				printf("Added object %d\n", id);
 			}
 		}

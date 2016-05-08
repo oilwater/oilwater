@@ -19,6 +19,7 @@
 #include "terminal.h"
 #include "network.h"
 #include "kernel.h"
+#include "physic.h"
 
 #include <iostream>
 
@@ -38,6 +39,7 @@ Camera *_camera;
 Terminal *_terminal;
 Network * _network;
 Kernel *_kernel;
+Physic *_physic;
 
 int local_fpc = 0;
 void set_camera_type(char type)
@@ -70,7 +72,7 @@ void loading()
     Model *_model;
 
     _model = new Model((char*)"res/boom_test_sprite");
-    _model->type = MODEL_SPRITE;
+//    _model->type = MODEL_SPRITE;
     _model->_res_pos.position.init(0, 1, -3);
     _model->init_camera(_camera);
     init_buffers(&_model->_res_mod);
@@ -105,9 +107,14 @@ void display()
     _network->packet();
 
     local_fpc++;
+    for(int x = _kernel->models.size() - 1; x >= 0; x--)
+    {
+        models[_kernel->models[x]->mesh_number]->_res_pos = *_kernel->models[x]->position;
+        models[_kernel->models[x]->mesh_number]->render();
+    }
 
-    for(int x = models.size() - 1; x >= 0; x--)
-        models[x]->render();
+//    for(int x = models.size() - 1; x >= 0; x--)
+//        models[x]->render();
 
     glfwSwapBuffers(window);
     glfwPollEvents();
@@ -166,8 +173,9 @@ int main(int argc, char** argv)
     QCoreApplication a(argc, argv);
 
     _kernel = new Kernel(argc, argv);
-		_kernel->load_map();
+        _kernel->load_map();
 
+//    _physic->init_kernel(_kernel);
 
     thread fpc(fpc_void);
     fpc.detach();

@@ -2,9 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "model.h"
+#include <string.h>
 #include "kernel.h"
-#include "string.h"
 
 Kernel::Kernel(int argc, char** argv)
 {
@@ -158,3 +157,14 @@ void Kernel::do_command(char* input)
 	}
 
 }
+
+void Kernel::get_models(vector <Model*> *_models)
+{
+	models = _models;
+}
+
+void Kernel::load_map()
+{
+
+}
+

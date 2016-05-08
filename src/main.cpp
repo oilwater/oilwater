@@ -18,9 +18,9 @@
 #include "model.h"
 #include "initbuff.hpp"
 #include "camera.h"
-#include "kernel.h"
 #include "terminal.h"
 #include "network.h"
+#include "kernel.h"
 
 #include <iostream>
 
@@ -170,7 +170,8 @@ int main(int argc, char** argv)
 {
     QCoreApplication a(argc, argv);
     Kernel *kernel = new Kernel(argc, argv);
-
+//		kernel->get_models(&models);
+		
     width = kernel->width;
     height = kernel->height;
 

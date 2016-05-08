@@ -9,8 +9,10 @@
 
 Kernel::Kernel(int argc, char** argv)
 {
-	map_was_loaded = false;
 	/* default config */
+#define DEF_PORT 33333
+	server_port = DEF_PORT;
+	local_port = DEF_PORT;
 	height = DEF_HEIGHT;
 	width = DEF_WIDTH;
 	fullscreen = false;
@@ -146,12 +148,13 @@ void Kernel::do_command(char* input)
 	if (!strcmp(command, "connect"))
 	{
 		mode = CLIENT;
-		sscanf(input, "%s %s", command, server_address); 
+		sscanf(input, "%s %s:%d", command, server_address, &server_port);
 		/* ... */
 	}
 	if (!strcmp(command, "server"))
 	{
 		mode = SERVER;
+		sscanf(input, "%s %d", command, &local_port);
 		/* ... */
 	}
 	if (!strcmp(command, "fullscreen"))

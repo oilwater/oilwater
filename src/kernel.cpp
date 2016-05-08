@@ -77,7 +77,11 @@ Kernel::Kernel(int argc, char** argv)
 			printf("Mode server\n");
 			break;
 	}
-};
+    fpc_info.fpc = 0;
+    fpc_info.fpc_max = 0;
+    fpc_info.fpc_min = 0;
+    fpc_info.fpc_min -=1;
+}
 
 void Kernel::load_config()
 {

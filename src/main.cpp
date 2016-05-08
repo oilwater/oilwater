@@ -11,6 +11,7 @@
 #include <unistd.h>
 
 #include <QCoreApplication>
+#include <thread>
 
 #include "model.h"
 #include "initbuff.hpp"
@@ -38,6 +39,7 @@ Terminal *_terminal;
 Network * _network;
 Kernel *_kernel;
 
+int local_fpc = 0;
 void set_camera_type(char type)
 {
     _camera->cam_type = type;
@@ -67,22 +69,6 @@ void loading()
 
     Model *_model;
 
-//    _model = new Model((char*)"res/load_sprite_inside");
-//    _model->_res_pos.position.init(0, 0, -2);
-//    _model->_res_pos.angular_acceleration.init(0.0, 0.0, 0.001);
-//    _model->type = MODEL_SPRITE_HP;
-//    _model->init_camera(_camera);
-//    init_buffers(&_model->_res_mod);
-//    models.push_back(_model);
-
-
-//    _model = new Model((char*)"res/load_sprite_outside");
-//    _model->type = MODEL_SPRITE_HP;
-//    _model->_res_pos.position.init(0, 0, -2.1);
-//    _model->init_camera(_camera);
-//    init_buffers(&_model->_res_mod);
-//    models.push_back(_model);
-
     _model = new Model((char*)"res/boom_test_sprite");
     _model->type = MODEL_SPRITE;
     _model->_res_pos.position.init(0, 1, -3);
@@ -97,12 +83,28 @@ void loading()
     models.push_back(_model);
 }
 
+void fpc_void()
+{
+    while(true)
+    {
+        sleep(1);
+        if(local_fpc > _kernel->fpc_info.fpc_max)
+            _kernel->fpc_info.fpc_max = local_fpc;
+        if(local_fpc < _kernel->fpc_info.fpc_min)
+            _kernel->fpc_info.fpc_min = local_fpc;
+        _kernel->fpc_info.fpc = local_fpc;
+        local_fpc = 0;
+    }
+}
+
 void display()
 {
     glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     _network->packet();
+
+    local_fpc++;
 
     for(int x = models.size() - 1; x >= 0; x--)
         models[x]->render();
@@ -163,10 +165,11 @@ int main(int argc, char** argv)
 {
     QCoreApplication a(argc, argv);
 
-
-
     _kernel = new Kernel(argc, argv);
 //    kernel->get_models(&models);
+
+    thread fpc(fpc_void);
+    fpc.detach();
 
     width = _kernel->width;
     height = _kernel->height;
@@ -175,10 +178,10 @@ int main(int argc, char** argv)
     window = glfwCreateWindow(width, height, "oilwater", NULL, NULL);
 
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
+    glfwSwapInterval(0);
     glfwShowWindow(window);
 
-        glewInit();
+    glewInit();
 
     _camera = new Camera();
     _camera->set_monitor(height, width);

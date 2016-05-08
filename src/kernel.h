@@ -14,9 +14,9 @@
 
 struct Fpc_info
 {
-    int fpc;
-    int fpc_min;
-    int fpc_max;
+    unsigned int fpc;
+    unsigned int fpc_min;
+    unsigned int fpc_max;
 };
 
 struct Models

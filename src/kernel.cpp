@@ -231,11 +231,13 @@ void Kernel::load_map()
 				printf("Added object %d\n", id);
 			}
 		}
+		fclose(map_file);
 	}
 	else
 	{
 		printf("Can not open map %s\n", map_path);
 	}
+
 }
 
 void Kernel::print_fpc()

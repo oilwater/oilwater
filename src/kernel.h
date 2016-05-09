@@ -23,7 +23,7 @@ struct Fpc_info
 struct SModel
 {
     unsigned int mesh_number;
-    Position* position;
+    res_pos* position;
 };
 
 class Kernel
@@ -43,7 +43,7 @@ public:
 
     void load_map();
 
-    std::vector <SModel*> *models;
+    std::vector <SModel*> models;
 	char* map_name;
 
     Fpc_info fpc_info;

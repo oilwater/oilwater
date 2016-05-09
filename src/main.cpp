@@ -72,7 +72,7 @@ void loading()
     Model *_model;
 
     _model = new Model((char*)"res/boom_test_sprite");
-    _model->type = MODEL_SPRITE;
+//    _model->type = MODEL_SPRITE;
     _model->_res_pos.position.init(0, 1, -3);
     _model->init_camera(_camera);
     init_buffers(&_model->_res_mod);

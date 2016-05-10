@@ -18,7 +18,8 @@ SOURCES += \
     src/model.cpp \
     src/position.cpp \
     src/terminal.cpp \
-    src/network.cpp
+    src/network.cpp \
+    src/letter_sprite.cpp
 
 HEADERS += \
     src/camera.h \
@@ -29,7 +30,8 @@ HEADERS += \
     src/model.h \
     src/position.h \
     src/terminal.h \
-    src/network.h
+    src/network.h \
+    src/letter_sprite.h
 
 LIBS =	-lglfw -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor -lpthread
 

@@ -62,7 +62,7 @@ void Model::render()
             glUniformMatrix4fv (_res_mod.camera_matrix, 1, GL_TRUE, &camera->get_matrix().m[0][0]);
         break;
     case MODEL_SPRITE:
-            _res_pos.angular_position.init(-camera->_res_pos.angular_position.v[0], -camera->_res_pos.angular_position.v[1],0);
+            _res_pos.angular_position.init(0, -camera->_res_pos.angular_position.v[1],0);
             world_matrix = get_position_matrix_sprite();
             glUniformMatrix4fv (_res_mod.camera_matrix, 1, GL_TRUE, &camera->get_matrix_sprite().m[0][0]);
         break;

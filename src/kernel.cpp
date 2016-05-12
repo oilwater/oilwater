@@ -19,8 +19,7 @@ Kernel::Kernel(int argc, char** argv)
 	mode = SINGLEPLAY;
 	map_name = (char*)malloc(255);
 	strcpy(map_name, "default_map");
-	load_config();
-//	models = new std::vector<SModel*>();
+    load_config();
 	/* parse command line arguments */
 	static const char *optString = "m:h:w:f:c:s";
 	int opt = 0;
@@ -193,43 +192,26 @@ void Kernel::load_map()
 				free(model);
         models.pop_back();
 	}
-	std::ofstream map_file;
-	std::string str;
-	char map_path[255];
+    std::ifstream map_file;
+    char map_path[255];
 	map_path[0] = '\0';
 	strcat(map_path, "res/maps/");
 	strcat(map_path, map_name);
 	strcat(map_path, ".map");
 	printf("Map path is %s\n", map_path);
-	map_file.open(map_path);
-	int id;
-  res_pos* pos;
-	while(!map_file->eof())
-	{
-		map_file >> str;
-		if (map_file->eof())
-		{
-			printf("Unexpected end of map file %s\n", map_path);
-			return;
-		}
-		sscanf(str.c_str(), "%i\n", &id);
-		printf("Loading object %d\n", id);
-     pos = new res_pos;
-		model = (SModel*)malloc(sizeof(SModel));
-		model->mesh_number = id;
-		model->position = pos;
-		double p0, p1, p2, v0, v1, v2, a0, a1, a2, ap0, ap1, ap2, av0, av1, av2, aa0, aa1, aa2;
-		map_file >> str;
-		sscanf(str.c_str(), "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", 
-         &p0, &p1, &p2, &v0, &v1, &v2, &a0, &a1, &a2, &ap0, &ap1, &ap2, &av0, &av1, &av2, &aa0, &aa1, &aa2);
-    model->position->position.init(p0, p1, p2);
-    model->position->velocity.init(v0, v1, v2);
-    model->position->acceleration.init(a0, a1, a2);
-    model->position->angular_position.init(ap0, ap1, ap2);
-    model->position->angular_velocity.init(av0, av1, av2);
-    model->position->angular_acceleration.init(aa0, aa1, aa2);
-    models.push_back(model);
- 		printf("Added object %d\n", id);
+    map_file.open((char*)map_path);
+    for(std::string str; std::getline(map_file, str); )
+        {
+         model = new SModel;
+
+//        model->position->position.init(p0, p1, p2);
+//        model->position->velocity.init(v0, v1, v2);
+//        model->position->acceleration.init(a0, a1, a2);
+//        model->position->angular_position.init(ap0, ap1, ap2);
+//        model->position->angular_velocity.init(av0, av1, av2);
+//        model->position->angular_acceleration.init(aa0, aa1, aa2);
+//        models.push_back(model);
+//        printf("Added object %d\n", id);
 	}
 	map_file.close();
 

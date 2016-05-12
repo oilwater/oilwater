@@ -7,6 +7,9 @@
 #include <QDebug>
 #include <iostream>
 #include <fstream>
+#include <sstream>
+
+using namespace std;
 
 Kernel::Kernel(int argc, char** argv)
 {
@@ -188,30 +191,47 @@ void Kernel::load_map()
   while(!models.empty())
 	{
         model = models.back();
-        delete model->position;
-				free(model);
+        free(model);
         models.pop_back();
 	}
-    std::ifstream map_file;
+    ifstream map_file;
     char map_path[255];
 	map_path[0] = '\0';
 	strcat(map_path, "res/maps/");
 	strcat(map_path, map_name);
-	strcat(map_path, ".map");
-	printf("Map path is %s\n", map_path);
+    strcat(map_path, ".map");
     map_file.open((char*)map_path);
-    for(std::string str; std::getline(map_file, str); )
-        {
-         model = new SModel;
+    for(string str; getline(map_file, str); )
+    {
+        model = new SModel;
+        istringstream str_stream(str);
+        str_stream >> model->mesh_number;
 
-//        model->position->position.init(p0, p1, p2);
-//        model->position->velocity.init(v0, v1, v2);
-//        model->position->acceleration.init(a0, a1, a2);
-//        model->position->angular_position.init(ap0, ap1, ap2);
-//        model->position->angular_velocity.init(av0, av1, av2);
-//        model->position->angular_acceleration.init(aa0, aa1, aa2);
-//        models.push_back(model);
-//        printf("Added object %d\n", id);
+        str_stream >> model->position.position.v[0];
+        str_stream >> model->position.position.v[1];
+        str_stream >> model->position.position.v[2];
+
+        str_stream >> model->position.velocity.v[0];
+        str_stream >> model->position.velocity.v[1];
+        str_stream >> model->position.velocity.v[2];
+
+        str_stream >> model->position.acceleration.v[0];
+        str_stream >> model->position.acceleration.v[1];
+        str_stream >> model->position.acceleration.v[2];
+
+        str_stream >> model->position.angular_position.v[0];
+        str_stream >> model->position.angular_position.v[1];
+        str_stream >> model->position.angular_position.v[2];
+
+        str_stream >> model->position.angular_velocity.v[0];
+        str_stream >> model->position.angular_velocity.v[1];
+        str_stream >> model->position.angular_velocity.v[2];
+
+        str_stream >> model->position.angular_acceleration.v[0];
+        str_stream >> model->position.angular_acceleration.v[1];
+        str_stream >> model->position.angular_acceleration.v[2];
+
+        models.push_back(model);
 	}
 	map_file.close();
 

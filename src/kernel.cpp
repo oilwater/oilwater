@@ -4,8 +4,9 @@
 #include <unistd.h>
 #include <string.h>
 #include "kernel.h"
-
 #include <QDebug>
+#include <iostream>
+#include <fstream>
 
 Kernel::Kernel(int argc, char** argv)
 {
@@ -185,57 +186,52 @@ void Kernel::load_map()
 	SModel* model;
 	/* erase all models from vector */
 	printf("Erasing objects\n");
-    while(!models.empty())
+  while(!models.empty())
 	{
         model = models.back();
         delete model->position;
-		free(model);
+				free(model);
         models.pop_back();
 	}
-	FILE *map_file;
+	std::ofstream map_file;
+	std::string str;
 	char map_path[255];
 	map_path[0] = '\0';
 	strcat(map_path, "res/maps/");
 	strcat(map_path, map_name);
 	strcat(map_path, ".map");
 	printf("Map path is %s\n", map_path);
-	map_file = fopen(map_path, "r");
+	map_file.open(map_path);
 	int id;
-    res_pos* pos;
-	if (map_file != NULL)
+  res_pos* pos;
+	while(!map_file->eof())
 	{
-		while(fscanf(map_file, "%i\n", &id) != EOF)
+		map_file >> str;
+		if (map_file->eof())
 		{
-			printf("Loading object %d\n", id);
-            pos = new res_pos;
-			model = (SModel*)malloc(sizeof(SModel));
-			model->mesh_number = id;
-			model->position = pos;
-			double p0, p1, p2, v0, v1, v2, a0, a1, a2, ap0, ap1, ap2, av0, av1, av2, aa0, aa1, aa2;
-			if (fscanf(map_file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", 
-						&p0, &p1, &p2, &v0, &v1, &v2, &a0, &a1, &a2, &ap0, &ap1, &ap2, &av0, &av1, &av2, &aa0, &aa1, &aa2)
-						== EOF)
-			{
-				printf("Unexpected end of map file %s\n", map_path);
-			}
-			else
-			{
-                model->position->position.init(p0, p1, p2);
-                model->position->velocity.init(v0, v1, v2);
-                model->position->acceleration.init(a0, a1, a2);
-                model->position->angular_position.init(ap0, ap1, ap2);
-                model->position->angular_velocity.init(av0, av1, av2);
-                model->position->angular_acceleration.init(aa0, aa1, aa2);
-                models.push_back(model);
-				printf("Added object %d\n", id);
-			}
+			printf("Unexpected end of map file %s\n", map_path);
+			return;
 		}
-		fclose(map_file);
+		sscanf(str.c_str(), "%i\n", &id);
+		printf("Loading object %d\n", id);
+     pos = new res_pos;
+		model = (SModel*)malloc(sizeof(SModel));
+		model->mesh_number = id;
+		model->position = pos;
+		double p0, p1, p2, v0, v1, v2, a0, a1, a2, ap0, ap1, ap2, av0, av1, av2, aa0, aa1, aa2;
+		map_file >> str;
+		sscanf(str.c_str(), "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", 
+         &p0, &p1, &p2, &v0, &v1, &v2, &a0, &a1, &a2, &ap0, &ap1, &ap2, &av0, &av1, &av2, &aa0, &aa1, &aa2);
+    model->position->position.init(p0, p1, p2);
+    model->position->velocity.init(v0, v1, v2);
+    model->position->acceleration.init(a0, a1, a2);
+    model->position->angular_position.init(ap0, ap1, ap2);
+    model->position->angular_velocity.init(av0, av1, av2);
+    model->position->angular_acceleration.init(aa0, aa1, aa2);
+    models.push_back(model);
+ 		printf("Added object %d\n", id);
 	}
-	else
-	{
-		printf("Can not open map %s\n", map_path);
-	}
+	map_file.close();
 
 }
 

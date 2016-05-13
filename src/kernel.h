@@ -23,7 +23,7 @@ struct Fpc_info
 struct SModel
 {
     unsigned int mesh_number;
-    res_pos* position;
+    res_pos position;
 };
 
 class Kernel

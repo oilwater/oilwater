@@ -36,6 +36,8 @@ void Network::readPendingDatagrams()
         udpSocket->readDatagram(datagram.data(), datagram.size(),
                                 &sender, &senderPort);
         qDebug() << datagram;
+
+        _camera->_res_pos.acceleration.v[0] = 0.3;
     }
 }
 

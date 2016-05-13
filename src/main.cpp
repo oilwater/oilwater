@@ -167,13 +167,10 @@ void tread_render()
     window = glfwCreateWindow(width, height, "oilwater", NULL, NULL);
 
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(0);
+    glfwSwapInterval(1);
     glfwShowWindow(window);
 
     glewInit();
-
-    _camera = new Camera();
-    _camera->set_monitor(height, width);
 
     _terminal = new Terminal(_kernel);
 
@@ -209,14 +206,17 @@ int main(int argc, char** argv)
     _physic = new Physic();
     _physic->init_kernel(_kernel);
 
-    _network = new Network();
-
-    thread fpc(fpc_void);
-    fpc.detach();
-
     width = _kernel->width;
     height = _kernel->height;
 
+    _camera = new Camera();
+    _camera->set_monitor(height, width);
+
+    _network = new Network();
+    _network->init_camera(_camera);
+
+    thread fpc(fpc_void);
+    fpc.detach();
 
     thread render(tread_render);
     render.detach();

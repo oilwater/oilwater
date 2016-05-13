@@ -54,15 +54,3 @@ LIBS =	-lglfw -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor
 # WIN32 
 #
 #LIBS =  -lglfw3 -lopengl32 -lgdi32 -lglew32 -Wl,--subsystem,windows
-
-DISTFILES += \
-    res/map_test/shaders/vert.glsl \
-    res/map_test/shaders/frag.glsl \
-    res/load_sprite_inside/shaders/vert.glsl \
-    res/load_sprite_inside/shaders/frag.glsl \
-    res/load_sprite_outside/shaders/vert.glsl \
-    res/load_sprite_outside/shaders/frag.glsl \
-    res/box_red/shaders/vert.glsl \
-    res/box_red/shaders/frag.glsl \
-    res/boom_test_sprite/shaders/vert.glsl \
-    res/boom_test_sprite/shaders/frag.glsl

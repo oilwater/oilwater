@@ -173,7 +173,7 @@ void Kernel::do_command(char* input)
     {
         print_fpc();
     }
-  if (!strcmp(command, "loadmap"))
+  if (!strcmp(command, "map"))
   {
 		sscanf(input, "%s %s", command, map_name);
 		load_map();
@@ -242,10 +242,7 @@ void Kernel::get_cashing_models_names(char* path)
     if(!list_file.is_open())
         cout << "errrorrrr!!" << endl;
     for(string str; getline(list_file, str); )
-    {
         others.push_back(str);
-        cout << str << "\t" << others.at(others.size() - 1)  << endl;
-    }
     list_file.close();
 
 

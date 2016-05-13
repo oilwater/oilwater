@@ -74,7 +74,6 @@ void loading()
     _kernel->get_cashing_models_names("res/list");
     for(int k = 0; k < _kernel->others.size() - 1; k++)
     {
-        cout << _kernel->others.at(k);
         _model = new Model((char *)_kernel->others.at(k).c_str());
         _model->init_camera(_camera);
         init_buffers(&_model->_res_mod);
@@ -162,22 +161,8 @@ void CursorPosCal(GLFWwindow *window, double xpos, double ypos)
     }
 }
 
-int main(int argc, char** argv)
+void tread_render()
 {
-    QCoreApplication a(argc, argv);
-
-    _kernel = new Kernel(argc, argv);
-    _kernel->load_map();
-
-    _physic = new Physic();
-    _physic->init_kernel(_kernel);
-
-    thread fpc(fpc_void);
-    fpc.detach();
-
-    width = _kernel->width;
-    height = _kernel->height;
-
     glfwInit();
     window = glfwCreateWindow(width, height, "oilwater", NULL, NULL);
 
@@ -193,10 +178,10 @@ int main(int argc, char** argv)
     _terminal = new Terminal(_kernel);
 
     loading();
-    _network = new Network();
-    _network->init_camera(_camera);
 
-		_kernel->get_network(_network);
+//    _network->init_camera(_camera);
+
+        _kernel->get_network(_network);
 
     glEnable(GL_DOUBLEBUFFER);
     glEnable(GL_DEPTH_TEST);
@@ -211,5 +196,31 @@ int main(int argc, char** argv)
 
     while(run)
         display();
-    return 0;
+    exit(0);
+}
+
+int main(int argc, char** argv)
+{
+    QCoreApplication a(argc, argv);
+
+    _kernel = new Kernel(argc, argv);
+    _kernel->load_map();
+
+    _physic = new Physic();
+    _physic->init_kernel(_kernel);
+
+    _network = new Network();
+
+    thread fpc(fpc_void);
+    fpc.detach();
+
+    width = _kernel->width;
+    height = _kernel->height;
+
+
+    thread render(tread_render);
+    render.detach();
+
+
+    return a.exec();
 }

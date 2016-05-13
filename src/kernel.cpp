@@ -9,8 +9,6 @@
 #include <fstream>
 #include <sstream>
 
-using namespace std;
-
 Kernel::Kernel(int argc, char** argv)
 {
 	/* default config */
@@ -184,11 +182,11 @@ void Kernel::do_command(char* input)
 
 void Kernel::load_map()
 {
-	printf("Loading map %s\n", map_name);
+    printf("Loading map %s\n", map_name);
 	SModel* model;
-	/* erase all models from vector */
-	printf("Erasing objects\n");
-  while(!models.empty())
+    /* erase all models from vector */
+    printf("Erasing objects\n");
+    while(!models.empty())
 	{
         model = models.back();
         free(model);
@@ -234,6 +232,22 @@ void Kernel::load_map()
         models.push_back(model);
 	}
 	map_file.close();
+
+}
+
+void Kernel::get_cashing_models_names(char* path)
+{
+    ifstream list_file;
+    list_file.open(path);
+    if(!list_file.is_open())
+        cout << "errrorrrr!!" << endl;
+    for(string str; getline(list_file, str); )
+    {
+        others.push_back(str);
+        cout << str << "\t" << others.at(others.size() - 1)  << endl;
+    }
+    list_file.close();
+
 
 }
 

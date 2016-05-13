@@ -13,6 +13,9 @@
 #define CLIENT 1
 #define SERVER 2
 
+using namespace std;
+
+
 struct Fpc_info
 {
     unsigned int fpc;
@@ -43,12 +46,15 @@ public:
 
     void load_map();
 
-    std::vector <SModel*> models;
-	char* map_name;
+    vector<string> others;
+    void get_cashing_models_names(char *path);
+
+    vector <SModel*> models;
+    char *map_name;
 
     Fpc_info fpc_info;
-		Network *network;
-		void get_network(Network* network);
+    Network *network;
+    void get_network(Network* network);
 private:
 		bool map_was_loaded;
     void print_fpc();

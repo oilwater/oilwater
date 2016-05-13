@@ -71,18 +71,15 @@ void loading()
 
     Model *_model;
 
-    _model = new Model((char*)"res/boom_test_sprite");
-    _model->type = MODEL_SPRITE;
-    _model->_res_pos.position.init(0, 1, -3);
-    _model->init_camera(_camera);
-    init_buffers(&_model->_res_mod);
-    models.push_back(_model);
-
-    _model = new Model((char*)"res/map_test");
-    _model->_res_pos.position.init(0, 0, -3);
-    _model->init_camera(_camera);
-    init_buffers(&_model->_res_mod);
-    models.push_back(_model);
+    _kernel->get_cashing_models_names("res/list");
+    for(int k = 0; k < _kernel->others.size() - 1; k++)
+    {
+        cout << _kernel->others.at(k);
+        _model = new Model((char *)_kernel->others.at(k).c_str());
+        _model->init_camera(_camera);
+        init_buffers(&_model->_res_mod);
+        models.push_back(_model);
+    }
 }
 
 void fpc_void()
@@ -107,14 +104,11 @@ void display()
     _network->packet();
 
     local_fpc++;
-    for(int x = 0; x <  _kernel->models.size(); x++)
+    for(int x = 0; x <  _kernel->models.size() - 1; x++)
     {
-        models[_kernel->models[x]->mesh_number]->_res_pos = *_kernel->models[x]->position;
+        models[_kernel->models[x]->mesh_number]->_res_pos = _kernel->models[x]->position;
         models[_kernel->models[x]->mesh_number]->render();
     }
-
-//    for(int x = models.size() - 1; x >= 0; x--)
-//        models[x]->render();
 
     glfwSwapBuffers(window);
     glfwPollEvents();
@@ -173,9 +167,10 @@ int main(int argc, char** argv)
     QCoreApplication a(argc, argv);
 
     _kernel = new Kernel(argc, argv);
-        _kernel->load_map();
+    _kernel->load_map();
 
-//    _physic->init_kernel(_kernel);
+    _physic = new Physic();
+    _physic->init_kernel(_kernel);
 
     thread fpc(fpc_void);
     fpc.detach();

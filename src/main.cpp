@@ -29,6 +29,7 @@ float width;
 float height;
 
 bool run = true;
+bool cashing_process = true;
 
 GLFWwindow *window;
 
@@ -64,11 +65,9 @@ void set_camera_type(char type)
     }
 }
 
-void loading()
+void tread_loading()
 {
     models.clear();
-    _camera->_res_pos.position.init(-5,-7,-5);
-
     Model *_model;
 
     _kernel->get_cashing_models_names("res/list");
@@ -76,13 +75,16 @@ void loading()
     {
         _model = new Model((char *)_kernel->others.at(k).c_str());
         _model->init_camera(_camera);
-        init_buffers(&_model->_res_mod);
         models.push_back(_model);
     }
+                                                    sleep(2); // test
+    _camera->_res_pos.position.init(0,-7,-15);
+    cashing_process = false;
 }
 
-void fpc_void()
+void thread_fpc()
 {
+    sleep(5);
     while(true)
     {
         sleep(1);
@@ -99,8 +101,6 @@ void display()
 {
     glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    _network->packet();
 
     local_fpc++;
     for(int x = 0; x <  _kernel->models.size() - 1; x++)
@@ -161,7 +161,38 @@ void CursorPosCal(GLFWwindow *window, double xpos, double ypos)
     }
 }
 
-void tread_render()
+void thread_logo_render()
+{
+    set_camera_type(LOCK_LOOK);
+    _camera->_res_pos.position.init(0,0,0);
+
+    Model *logo_static = new Model((char *)"res/sprites/load_sprite_outside");
+    logo_static->init_camera(_camera);
+    init_buffers(&logo_static->_res_mod);
+    logo_static->_res_pos.position.init(0, 0, -0.1);
+    logo_static->_res_pos.angular_position.init(M_PI_2,0,M_PI);
+    Model *logo_rotate = new Model((char *)"res/sprites/load_sprite_inside");
+    logo_rotate->init_camera(_camera);
+    init_buffers(&logo_rotate->_res_mod);
+    logo_rotate->_res_pos.angular_position.init(M_PI_2,0,M_PI);
+
+    while (cashing_process)
+    {
+        glClearColor(1.0, 1.0, 1.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        logo_static->render();
+        logo_rotate->render();
+        logo_rotate->_res_pos.angular_position.v[1]+=0.1;
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    set_camera_type(FREE_LOOK);
+}
+
+void thread_render()
 {
     glfwInit();
     window = glfwCreateWindow(width, height, "oilwater", NULL, NULL);
@@ -174,11 +205,8 @@ void tread_render()
 
     _terminal = new Terminal(_kernel);
 
-    loading();
 
-//    _network->init_camera(_camera);
-
-        _kernel->get_network(_network);
+    _kernel->get_network(_network);
 
     glEnable(GL_DOUBLEBUFFER);
     glEnable(GL_DEPTH_TEST);
@@ -186,10 +214,21 @@ void tread_render()
     glEnable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
 
-    set_camera_type(FREE_LOOK);
-
     glfwSetKeyCallback(window, KeyCall);
     glfwSetCursorPosCallback(window, CursorPosCal);
+
+
+    thread loading(tread_loading);
+    loading.detach();
+
+    thread_logo_render();
+
+    for(int k = 0; k < models.size() - 1; k++)
+    {
+        init_buffers(&models.at(k)->_res_mod);
+    }
+
+
 
     while(run)
         display();
@@ -215,12 +254,11 @@ int main(int argc, char** argv)
     _network = new Network();
     _network->init_camera(_camera);
 
-    thread fpc(fpc_void);
-    fpc.detach();
-
-    thread render(tread_render);
+    thread render(thread_render);
     render.detach();
 
 
+    thread fpc(thread_fpc);
+    fpc.detach();
     return a.exec();
 }

@@ -28,6 +28,8 @@ using namespace std;
 float width;
 float height;
 
+bool fscr;
+
 bool run = true;
 bool cashing_process = true;
 
@@ -85,6 +87,7 @@ void tread_loading()
 void thread_fpc()
 {
     sleep(5);
+    local_fpc = 0;
     while(true)
     {
         sleep(1);
@@ -195,7 +198,10 @@ void thread_logo_render()
 void thread_render()
 {
     glfwInit();
-    window = glfwCreateWindow(width, height, "oilwater", NULL, NULL);
+    if(fscr)
+        window = glfwCreateWindow(width, height, "oilwater", NULL, NULL);
+    else
+        window = glfwCreateWindow(width, height, "oilwater", glfwGetPrimaryMonitor(), NULL);
 
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
@@ -248,6 +254,7 @@ int main(int argc, char** argv)
     width = _kernel->width;
     height = _kernel->height;
 
+    fscr - _kernel->fullscreen;
     _camera = new Camera();
     _camera->set_monitor(height, width);
 

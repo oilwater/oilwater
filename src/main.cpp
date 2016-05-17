@@ -198,7 +198,7 @@ void thread_logo_render()
 void thread_render()
 {
     glfwInit();
-    if(fscr)
+    if(!fscr)
         window = glfwCreateWindow(width, height, "oilwater", NULL, NULL);
     else
         window = glfwCreateWindow(width, height, "oilwater", glfwGetPrimaryMonitor(), NULL);
@@ -254,7 +254,7 @@ int main(int argc, char** argv)
     width = _kernel->width;
     height = _kernel->height;
 
-    fscr - _kernel->fullscreen;
+    fscr = _kernel->fullscreen;
     _camera = new Camera();
     _camera->set_monitor(height, width);
 

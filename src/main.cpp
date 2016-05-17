@@ -10,7 +10,6 @@
 
 #include <unistd.h>
 
-#include <QCoreApplication>
 #include <thread>
 
 #include "model.h"
@@ -72,14 +71,13 @@ void tread_loading()
     models.clear();
     Model *_model;
 
-    _kernel->get_cashing_models_names("res/list");
+    _kernel->get_cashing_models_names((char*)"res/list");
     for(int k = 0; k < _kernel->others.size() - 1; k++)
     {
         _model = new Model((char *)_kernel->others.at(k).c_str());
         _model->init_camera(_camera);
         models.push_back(_model);
     }
-                                                    sleep(2); // test
     _camera->_res_pos.position.init(0,-7,-15);
     cashing_process = false;
 }
@@ -243,8 +241,6 @@ void thread_render()
 
 int main(int argc, char** argv)
 {
-    QCoreApplication a(argc, argv);
-
     _kernel = new Kernel(argc, argv);
     _kernel->load_map();
 
@@ -261,11 +257,8 @@ int main(int argc, char** argv)
     _network = new Network();
     _network->init_camera(_camera);
 
-    thread render(thread_render);
-    render.detach();
-
-
     thread fpc(thread_fpc);
     fpc.detach();
-    return a.exec();
+
+    thread_render();
 }

@@ -2,12 +2,21 @@
 #define KERNEL_H
 
 #include <vector>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include "position.h"
 #include "network.h"
 
 #define DEF_HEIGHT 640.0
 #define DEF_WIDTH 800.0
 #define CONFIG_PATH "res/.config"
+
 
 #define SINGLEPLAY 0
 #define CLIENT 1
@@ -63,4 +72,4 @@ private:
 	void save_config();
 };
 
-#endif KERNEL_H
+#endif // KERNEL_H

@@ -1,13 +1,4 @@
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
 #include "kernel.h"
-#include <QDebug>
-#include <iostream>
-#include <fstream>
-#include <sstream>
 
 Kernel::Kernel(int argc, char** argv)
 {
@@ -250,9 +241,9 @@ void Kernel::get_cashing_models_names(char* path)
 
 void Kernel::print_fpc()
 {
-    qDebug() << "fpc now: " << fpc_info.fpc;
-    qDebug() << "fpc max: " << fpc_info.fpc_max;
-    qDebug() << "fpc min: " << fpc_info.fpc_min;
+	cout << "fpc now: " << fpc_info.fpc << endl;
+    cout << "fpc max: " << fpc_info.fpc_max << endl;
+    cout << "fpc min: " << fpc_info.fpc_min << endl;
 }
 
 void Kernel::get_network(Network* _network)

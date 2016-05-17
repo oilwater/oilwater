@@ -1,15 +1,12 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-#include <QObject>
-#include <QUdpSocket>
 #include "camera.h"
 
 #define DEF_PORT 33333
 
-class Network:QObject
+class Network
 {
-    Q_OBJECT
 public:
     Network();
     void init_camera(Camera * camera);
@@ -17,9 +14,6 @@ public:
     void initSocket();
 private:
     Camera * _camera;
-    QUdpSocket * udpSocket;
-private slots:
-    void readPendingDatagrams();
 };
 
 #endif // NETWORK_H

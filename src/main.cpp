@@ -196,6 +196,7 @@ void thread_logo_render()
 void thread_render()
 {
     glfwInit();
+    glfwWindowHint(GLFW_SAMPLES, 3);
     if(!fscr)
         window = glfwCreateWindow(width, height, "oilwater", NULL, NULL);
     else
@@ -213,6 +214,7 @@ void thread_render()
     _kernel->get_network(_network);
 
     glEnable(GL_DOUBLEBUFFER);
+    glEnable(GL_MULTISAMPLE);
     glEnable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);

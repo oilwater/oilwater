@@ -54,3 +54,7 @@ LIBS =	-lglfw -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor
 # WIN32 
 #
 #LIBS =  -lglfw3 -lopengl32 -lgdi32 -lglew32 -Wl,--subsystem,windows
+
+DISTFILES += \
+    res/maps/cyam_map_test/shaders/vert.glsl \
+    res/maps/cyam_map_test/shaders/frag.glsl

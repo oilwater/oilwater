@@ -14,8 +14,8 @@ class Physic
 public:
     Physic();
     void init_kernel(Kernel * kernel);
+    void start_physic();
 public:
-    void loading();
     Kernel * _kernel;
 };
 

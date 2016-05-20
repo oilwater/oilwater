@@ -57,4 +57,9 @@ LIBS =	-lglfw -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor
 
 DISTFILES += \
     res/maps/cyam_map_test/shaders/vert.glsl \
-    res/maps/cyam_map_test/shaders/frag.glsl
+    res/maps/cyam_map_test/shaders/frag.glsl \
+    res/list \
+    res/maps/test.map \
+    res/maps/default_map.map \
+    res/maps/map_test/shaders/frag.glsl \
+    res/maps/map_test/shaders/vert.glsl

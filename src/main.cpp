@@ -78,7 +78,7 @@ void tread_loading()
         _model->init_camera(_camera);
         models.push_back(_model);
     }
-    _camera->_res_pos.position.init(0,-7,-15);
+    _camera->_res_pos.position.init(0,-5,-5);
     cashing_process = false;
 }
 
@@ -104,7 +104,7 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     local_fpc++;
-    for(int x = 0; x <  _kernel->models.size() - 1; x++)
+    for(int x = 0; x <  _kernel->models.size(); x++)
     {
         models[_kernel->models[x]->mesh_number]->_res_pos = _kernel->models[x]->position;
         models[_kernel->models[x]->mesh_number]->render();
@@ -196,7 +196,7 @@ void thread_logo_render()
 void thread_render()
 {
     glfwInit();
-    glfwWindowHint(GLFW_SAMPLES, 3);
+    glfwWindowHint(GLFW_SAMPLES, 0);
     if(!fscr)
         window = glfwCreateWindow(width, height, "oilwater", NULL, NULL);
     else
@@ -262,5 +262,6 @@ int main(int argc, char** argv)
     thread fpc(thread_fpc);
     fpc.detach();
 
+    _physic->start_physic();
     thread_render();
 }

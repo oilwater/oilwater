@@ -34,13 +34,13 @@ void main()
             {
                vec3 L = normalize(gl_LightSource[i].position.xyz - POSITION);
                vec3 E = normalize(-POSITION);
-               vec3 R = normalize(-reflect(L, normal));
+               vec3 R = normalize(-reflect(L, NORMAL));
 
                //calculate Ambient Term:
                vec4 Iamb = gl_FrontLightProduct[i].ambient;
 
                //calculate Diffuse Term:
-               vec4 Idiff = gl_FrontLightProduct[i].diffuse * max(dot(normal, L), 0.0);
+               vec4 Idiff = gl_FrontLightProduct[i].diffuse * max(dot(NORMAL, L), 0.0);
                Idiff = clamp(Idiff, 0.0, 1.0);
 
                // calculate Specular Term:
@@ -55,6 +55,6 @@ void main()
 
 
                // write Total Color:
-               gl_FragColor = + gl_FrontLightModelProduct.sceneColor + finalColor;
+               gl_FragColor = vec4(vec3(texture2D(colour_map, texcord)),  texture2D(colour_map, texcord).a) + gl_FrontLightModelProduct.sceneColor + finalColor;
 
 }

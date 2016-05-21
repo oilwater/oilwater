@@ -219,6 +219,36 @@ void thread_render()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
+    glEnable(GL_LIGHTING);
+
+    const GLfloat par0_1[] = {0.2, 0.2, 0.2, 1.0};
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, par0_1);
+    const GLfloat par0_2[] = {14.5, 8.0, -14.5};
+    glLightfv(GL_LIGHT0, GL_POSITION, par0_2);
+    const GLfloat par0_3[] = {0.0, 0.0, 0.0, 1.0};
+    glLightfv(GL_LIGHT0, GL_AMBIENT, par0_3);
+
+    const GLfloat par1_1[] = {0.4, 0.0, 0.0, 1.0};
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, par1_1);
+    const GLfloat par1_2[] = {-14.5, 8.0, -14.5};
+    glLightfv(GL_LIGHT1, GL_POSITION, par1_2);
+    const GLfloat par1_3[] = {0.0, 0.0, 0.0, 1.0};
+    glLightfv(GL_LIGHT1, GL_AMBIENT, par1_3);
+
+    const GLfloat par2_1[] = {0.0, 0.5, 0.0, 1.0};
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, par2_1);
+    const GLfloat par2_2[] = {14.5, 8.0, 14.5};
+    glLightfv(GL_LIGHT2, GL_POSITION, par2_2);
+    const GLfloat par2_3[] = {0.0, 0.0, 0.0, 1.0};
+    glLightfv(GL_LIGHT2, GL_AMBIENT, par2_3);
+
+    const GLfloat par3_1[] = {0.0, 0.0, 0.5, 1.0};
+    glLightfv(GL_LIGHT3, GL_DIFFUSE, par3_1);
+    const GLfloat par3_2[] = {-14.5, 8.0, 14.5};
+    glLightfv(GL_LIGHT3, GL_POSITION, par3_2);
+    const GLfloat par3_3[] = {0.0, 0.0, 0.0, 1.0};
+    glLightfv(GL_LIGHT3, GL_AMBIENT, par3_3);
+
 
     glfwSetKeyCallback(window, KeyCall);
     glfwSetCursorPosCallback(window, CursorPosCal);

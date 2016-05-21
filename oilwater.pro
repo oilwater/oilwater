@@ -35,7 +35,7 @@ HEADERS += \
     src/letter_sprite.h \
     src/physic.h
 
-LIBS =	-lglfw -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor -lpthread
+#LIBS =	-lglfw -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor -lpthread
 
 # OS X PATH
 #
@@ -53,7 +53,7 @@ LIBS =	-lglfw -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor
 
 # WIN32 
 #
-#LIBS =  -lglfw3 -lopengl32 -lgdi32 -lglew32 -Wl,--subsystem,windows
+LIBS =  -lglfw3 -lopengl32 -lgdi32 -lglew32 -Wl,--subsystem,windows
 
 DISTFILES += \
     res/maps/cyam_map_test/shaders/vert.glsl \

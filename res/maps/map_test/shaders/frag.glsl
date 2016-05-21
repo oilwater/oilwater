@@ -11,6 +11,9 @@ varying mat3 TBN;
 
 varying vec3 POSITION;
 
+#define MAX_LIGHTS 4
+
+
 float LinearizeDepth(float depth)
 {
     float z = depth * 2.0 - 1.0;
@@ -23,7 +26,35 @@ void main()
         float NormalMapFactor = dot(normal, vec3(-vec3(POSITION) + vec3(0.2)));
         float l = length(vec3(POSITION) - vec3(0.2));
     float depth = LinearizeDepth(gl_FragCoord.z) / far;
-            gl_FragDepth = depth;
+         gl_FragDepth = depth;
 
-            gl_FragColor = vec4(vec3(NormalMapFactor * texture2D(colour_map, texcord)) / (l),  texture2D(colour_map, texcord).a);
+        vec4 finalColor = vec4(0.0, 0.0, 0.0, 0.0);
+
+        for (int i=0; i < MAX_LIGHTS; i++)
+            {
+               vec3 L = normalize(gl_LightSource[i].position.xyz - POSITION);
+               vec3 E = normalize(-POSITION);
+               vec3 R = normalize(-reflect(L, normal));
+
+               //calculate Ambient Term:
+               vec4 Iamb = gl_FrontLightProduct[i].ambient;
+
+               //calculate Diffuse Term:
+               vec4 Idiff = gl_FrontLightProduct[i].diffuse * max(dot(normal, L), 0.0);
+               Idiff = clamp(Idiff, 0.0, 1.0);
+
+               // calculate Specular Term:
+               /*
+               vec4 Ispec = gl_FrontLightProduct[i].specular
+                            * pow(max(dot(R,E),0.0),0.3*gl_FrontMaterial.shininess);
+               Ispec = clamp(Ispec, 0.0, 1.0);
+               */
+
+               finalColor += Iamb + Idiff /*+ Ispec*/;
+            }
+
+
+               // write Total Color:
+               gl_FragColor = + gl_FrontLightModelProduct.sceneColor + finalColor;
+
 }

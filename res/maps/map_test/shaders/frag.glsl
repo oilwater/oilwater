@@ -26,6 +26,7 @@ void main()
         vec3 normal = TBN * vec3(texture2D(normal_map, texcord));
         float NormalMapFactor;
         float l;
+        gl_FragColor = vec4(0);
     float depth = LinearizeDepth(gl_FragCoord.z) / far;
          gl_FragDepth = depth;
 

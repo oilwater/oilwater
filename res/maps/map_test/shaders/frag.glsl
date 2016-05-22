@@ -24,7 +24,7 @@ float LinearizeDepth(float depth)
 void main()
 {
         vec3 normal = TBN * vec3(texture2D(normal_map, texcord));
-        float NormalMapFactor = dot(normal, vec3(-vec3(POSITION) + vec3(0.2)));
+        float NormalMapFactor;
         float l;
     float depth = LinearizeDepth(gl_FragCoord.z) / far;
          gl_FragDepth = depth;
@@ -32,8 +32,9 @@ void main()
 
         for (int i=0; i < MAX_LIGHTS; i++)
             {
+               NormalMapFactor = dot(NORMAL, vec3(gl_LightSource[i].position.xyz - POSITION));
                l = length(gl_LightSource[i].position.xyz - POSITION);
-               gl_FragColor += vec4(vec3(texture2D(colour_map, texcord)) / l,  texture2D(colour_map, texcord).a);
+               gl_FragColor += vec4(vec3(texture2D(colour_map, texcord)) * NormalMapFactor / (l * l),  texture2D(colour_map, texcord).a);
             }
 
 }

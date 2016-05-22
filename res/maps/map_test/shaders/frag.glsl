@@ -33,9 +33,12 @@ void main()
 
         for (int i=0; i < MAX_LIGHTS; i++)
             {
-               NormalMapFactor = dot(NORMAL, vec3(gl_LightSource[i].position.xyz - POSITION));
-               l = length(gl_LightSource[i].position.xyz - POSITION);
-               gl_FragColor += vec4(vec3(texture2D(colour_map, texcord)) * NormalMapFactor / (l * l),  texture2D(colour_map, texcord).a);
+                NormalMapFactor = clamp(dot(normal, vec3(gl_LightSource[i].position.xyz - POSITION)), 0.0, 1.0);
+                l = length(gl_LightSource[i].position.xyz - POSITION);
+
+                gl_FragColor += vec4(vec3(NormalMapFactor * texture2D(colour_map, texcord)) / l +
+                                     vec3(NormalMapFactor * gl_LightSource[i].diffuse.rgb) / l,
+                                     texture2D(colour_map, texcord).a);
             }
 
 }

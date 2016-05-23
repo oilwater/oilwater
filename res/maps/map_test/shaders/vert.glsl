@@ -18,7 +18,6 @@ varying mat3 TBN;
 
 varying vec3 POSITION;
 
-
 void main()
 {
              NORMAL = (vec3(world_matrix * vec4(normals, 0)));
@@ -27,9 +26,9 @@ void main()
 
         TBN = mat3(TANGENT, BITANGENT, NORMAL);
 
-    texcord = UV;
+        texcord = UV;
 
-    gl_Position = camera_matrix * world_matrix * vertex;
+        gl_Position = camera_matrix * world_matrix * vertex;
         POSITION = vec3(world_matrix * vertex);
 
 }

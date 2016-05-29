@@ -1,7 +1,7 @@
 CXX = g++ -std=c++11
 OBJS = main.o utils.o
 
-LIBS =	-lglfw -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor -lpthread
+LIBS =	-lglfw3 -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor -lpthread
 
 OBJS = \
     src/camera.o \

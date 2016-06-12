@@ -1,7 +1,8 @@
 CXX = g++ -std=c++11
 OBJS = main.o utils.o
 
-LIBS =	-lglfw3 -lGL -lGLEW -lm -lXrandr -lXi -lX11 -lXxf86vm -lXinerama -lXcursor -lpthread
+LIBS = -L/usr/local/Cellar/glew/1.13.0/lib -L/usr/local/Cellar/glfw3/3.1.2/lib -framework OpenGL -lglfw3 -lGLEW -framework IOKit -framework CoreFoundation -framework CoreVideo -framework Cocoa -v
+
 
 OBJS = \
     src/camera.o \
@@ -23,6 +24,7 @@ $(TARGET):	$(OBJS)
 all:	$(TARGET)
 
 clean:
-	rm $(OBJS) 
+	rm $(OBJS) $(TARGET)
 	
-
+run:
+	./oilwater

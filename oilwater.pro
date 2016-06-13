@@ -11,7 +11,6 @@ TEMPLATE = app
 
 SOURCES += \
     src/camera.cpp \
-    src/geometry.cpp \
     src/initbuff.cpp \
     src/kernel.cpp \
     src/main.cpp \
@@ -24,7 +23,6 @@ SOURCES += \
 
 HEADERS += \
     src/camera.h \
-    src/geometry.h \
     src/glmath.hpp \
     src/initbuff.hpp \
     src/kernel.h \

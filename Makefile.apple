@@ -13,7 +13,6 @@ OBJS = \
     src/position.o \
     src/terminal.o \
     src/network.o \
-    src/letter_sprite.o \
     src/physic.o
 
 TARGET = 	oilwater
